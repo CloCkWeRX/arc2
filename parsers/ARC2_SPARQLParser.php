@@ -378,6 +378,10 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
         $this->indexBnodes($sub_r, $pattern_id);
         $r['patterns'][] = array('type' => 'triples', 'patterns' => $sub_r);
       }
+      elseif ((list($sub_r, $sub_v) = $this->xSelectQuery($sub_v)) && $sub_r) {
+        $r['patterns'][] = array('type' => 'subquery', 'query' => $sub_r);
+      }
+
       do {
         $proceed = 0;
         if ((list($sub_r, $sub_v) = $this->xGraphPatternNotTriples($sub_v)) && $sub_r) {
