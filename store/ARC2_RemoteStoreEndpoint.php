@@ -299,6 +299,7 @@ class ARC2_RemoteStoreEndpoint extends ARC2_RemoteStore {
       'htmltab' => 'HTMLTable',
       'tsv' => 'TSV',
       'csv' => 'CSV',
+      'sqlite' => 'SQLite',
     );
     $infos['output'] = $this->getResultFormat($formats, 'xml');
     return $infos;
@@ -356,6 +357,7 @@ class ARC2_RemoteStoreEndpoint extends ARC2_RemoteStore {
       'htmltab' => 'HTMLTable',
       'tsv' => 'TSV',
       'csv' => 'CSV',
+      'sqlite' => 'SQLite',
     );
     if ($f = $this->getResultFormat($formats, 'xml')) {
       $m = 'get' . $f . 'SelectResultDoc';
@@ -377,6 +379,10 @@ class ARC2_RemoteStoreEndpoint extends ARC2_RemoteStore {
       'htmltab' => 'HTMLTable',
       'tsv' => 'TSV',
       'csv' => 'CSV',
+<<<<<<< HEAD
+=======
+      'sqlite' => 'SQLite',
+>>>>>>> 8ca884432194612a04dfbd101bef5e0d471ce719
     );
     $passthrough = $this->v('passthrough_sparqlxml', false, $this->a);
     if ($passthrough && $this->getResultFormat($formats, 'xml') == 'SPARQLXML') {
@@ -546,6 +552,89 @@ class ARC2_RemoteStoreEndpoint extends ARC2_RemoteStore {
     return $r ? $r : '<em>No results found</em>';
   }
 
+<<<<<<< HEAD
+=======
+  function getSQLiteSelectResultDoc($r) {
+    if ($this->p('show_inline')) {
+      return "This format cannot be displayed inline.";
+    }
+    $tmpdir = sys_get_temp_dir();
+    $tmpname = tempnam($tmpdir, 'arc2_sqlite_results');
+
+    try {
+      $dbh = new PDO("sqlite:$tmpname");
+    }
+    catch (PDOException $e) {
+      return 'failed to create SQLite database: ' . $e->getMessage();
+    }
+
+    $vars = $r['result']['variables'];
+    $rows = $r['result']['rows'];
+
+    // create table
+    $sql = 'CREATE TABLE results (';
+    $first = true;
+    foreach ($vars as $var) {
+      if (!$first) {
+        $sql .= ', ';
+      }
+      $sql .= "$var TEXT";
+      $sql .= ",{$var}_type TEXT";
+      $first = false;
+    }
+    $sql .= ');';
+
+    $dbh->exec($sql);
+
+    // insert rows of data
+    $first = true;
+    $sql = 'INSERT INTO results VALUES(';
+    foreach ($vars as $var) {
+      if (!$first) {
+        $sql .= ',';
+      }
+      $sql .= ":$var";
+      $sql .= ",:{$var}_type";
+      $first = false;
+    }
+    $sql .= ')';
+
+    $sth = $dbh->prepare($sql);
+
+    foreach ($rows as $row) {
+      $params = array();
+      foreach ($vars as $var) {
+        if (isset($row[$var])) {
+          $params[":$var"] = $row[$var];
+        }
+        else {
+          $params[":$var"] = null;
+        }
+
+        if (isset($row["$var type"])) {
+          $params[":{$var}_type"] = $row["$var type"];
+        }
+        else {
+          $params[":{$var}_type"] = null;
+        }
+      }
+      $sth->execute($params);
+    }
+
+    $sth->closeCursor();
+
+    $data = file_get_contents($tmpname);
+
+    $dbh = null;
+    unlink($tmpname);
+
+    $this->setHeader('content-type', 'Content-Type: application/octet-stream; header=present');
+    $this->setHeader('content-disposition', 'Content-Disposition: attachment; filename=results.sqlite3');
+
+    return $data;
+  }
+
+>>>>>>> 8ca884432194612a04dfbd101bef5e0d471ce719
   function getCSVSelectResultDoc($r) {
     // Output will always have header set
     $this->setHeader('content-type', 'Content-Type: text/csv; charset=utf-8; header=present');
@@ -1215,6 +1304,10 @@ DEFAULT_END;
               <option value="htmltab" ' . ($sel == 'htmltab' ? $sel_code : '') . '>HTML Table</option>
               <option value="tsv" ' . ($sel == 'tsv' ? $sel_code : '') . '>TSV</option>
               <option value="csv" ' . ($sel == 'csv' ? $sel_code : '') . '>CSV</option>
+<<<<<<< HEAD
+=======
+              <option value="sqlite" ' . ($sel == 'sqlite' ? $sel_code : '') . '>SQLite database</option>
+>>>>>>> 8ca884432194612a04dfbd101bef5e0d471ce719
             </select>
           </dd>
           
