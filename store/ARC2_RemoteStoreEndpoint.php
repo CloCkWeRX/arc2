@@ -547,8 +547,6 @@ class ARC2_RemoteStoreEndpoint extends ARC2_RemoteStore {
     return $r ? $r : '<em>No results found</em>';
   }
 
-<<<<<<< HEAD
-=======
   function getSQLiteSelectResultDoc($r) {
     if ($this->p('show_inline')) {
       return "This format cannot be displayed inline.";
@@ -629,7 +627,6 @@ class ARC2_RemoteStoreEndpoint extends ARC2_RemoteStore {
     return $data;
   }
 
->>>>>>> 8ca884432194612a04dfbd101bef5e0d471ce719
   function getCSVSelectResultDoc($r) {
     // Output will always have header set
     $this->setHeader('content-type', 'Content-Type: text/csv; charset=utf-8; header=present');
@@ -1299,10 +1296,7 @@ DEFAULT_END;
               <option value="htmltab" ' . ($sel == 'htmltab' ? $sel_code : '') . '>HTML Table</option>
               <option value="tsv" ' . ($sel == 'tsv' ? $sel_code : '') . '>TSV</option>
               <option value="csv" ' . ($sel == 'csv' ? $sel_code : '') . '>CSV</option>
-<<<<<<< HEAD
-=======
               <option value="sqlite" ' . ($sel == 'sqlite' ? $sel_code : '') . '>SQLite database</option>
->>>>>>> 8ca884432194612a04dfbd101bef5e0d471ce719
             </select>
           </dd>
 
