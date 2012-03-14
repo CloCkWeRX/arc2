@@ -12,11 +12,11 @@ ARC2::inc('Class');
 
 class ARC2_TestHandler extends ARC2_Class {
 
-  function __construct($a, &$caller, &$data_store) {/* caller has to be a store */
+  function __construct($a, $caller, $data_store) {/* caller has to be a store */
     parent::__construct($a, $caller);
     $this->data_store = $data_store;
   }
-  
+
   function __init() {
     parent::__init();
     $this->store = $this->caller;
@@ -25,7 +25,7 @@ class ARC2_TestHandler extends ARC2_Class {
   }
 
   /*  */
-  
+
   function runTest($id) {
     $type = $this->getTestType($id);
     $m = 'run' . $type;
@@ -33,9 +33,9 @@ class ARC2_TestHandler extends ARC2_Class {
     sleep(1);
     return $r;
   }
-  
+
   /*  */
-  
+
   function getTestType($id) {
     $q = 'SELECT ?type WHERE { <' .$id. '> a ?type . }';
     $qr = $this->store->query($q);
@@ -43,7 +43,7 @@ class ARC2_TestHandler extends ARC2_Class {
     $r = preg_replace('/^.*\#([^\#]+)$/', '$1', $r);
     return $r;
   }
-  
+
   /*  */
 
   function getFile($url) {
@@ -66,7 +66,7 @@ class ARC2_TestHandler extends ARC2_Class {
     }
     return file_get_contents('tmp/' . $fname);
   }
-  
+
   function runPositiveSyntaxTest($id) {
     $nl = "\n";
     $r = '';
@@ -97,7 +97,7 @@ class ARC2_TestHandler extends ARC2_Class {
     }
     return array('pass' => $pass, 'info' => $r);
   }
-  
+
   /*  */
 
   function runNegativeSyntaxTest($id) {
@@ -140,7 +140,7 @@ class ARC2_TestHandler extends ARC2_Class {
     $q = '
       PREFIX mf:      <http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#> .
       PREFIX qt:      <http://www.w3.org/2001/sw/DataAccess/tests/test-query#> .
-      SELECT DISTINCT ?query ?data ?graph_data ?result WHERE { 
+      SELECT DISTINCT ?query ?data ?graph_data ?result WHERE {
         <' .$id. '> mf:action ?action ;
                     mf:result ?result .
         ?action     qt:query  ?query .
@@ -221,7 +221,7 @@ class ARC2_TestHandler extends ARC2_Class {
       }
       elseif ($q_type == 'construct') {
         $ser = ARC2::getTurtleSerializer($this->a);
-        $qr_result = $ser->getSerializedIndex($qr_result);    
+        $qr_result = $ser->getSerializedIndex($qr_result);
       }
     }
     //echo '<pre>query result: ' . $nl . htmlspecialchars(print_r($qr_result, 1)) . '</pre>';
@@ -257,7 +257,7 @@ class ARC2_TestHandler extends ARC2_Class {
   }
 
   /*  */
-  
+
   function isSameSelectResult($qr, $result, $result_base) {
     if (strpos($result, 'http://www.w3.org/2001/sw/DataAccess/tests/result-set#')) {
       $parser = ARC2::getRDFParser($this->a);
@@ -301,9 +301,9 @@ class ARC2_TestHandler extends ARC2_Class {
     }
     return array('pass' => $pass, 'info' => $valid_qr);
   }
-  
+
   /*  */
-  
+
   function isSameConstructResult($qr, $result, $result_base, $test) {
     $parser = ARC2::getRDFParser($this->a);
     $parser->parse('', $result);
@@ -313,7 +313,7 @@ class ARC2_TestHandler extends ARC2_Class {
     $triples = $parser->getTriples();
     $info = '<pre>' . print_r($valid_triples, 1) .'</pre>';
     $info = '';
-    
+
     //echo '<pre>' . print_r($index, 1) .'</pre>';
     $pass = 0;
     if (in_array($test, array(/* manually checked 2007-09-21 */
@@ -327,9 +327,9 @@ class ARC2_TestHandler extends ARC2_Class {
     }
     return array('pass' => $pass, 'info' => $valid_triples);
   }
-  
+
   /*  */
-  
+
   function isSameAskResult($qr, $result, $result_base) {
     if (preg_match('/(true|false)\.(ttl|n3)$/', $result_base, $m)) {
       $valid_r = $m[1];
@@ -341,9 +341,9 @@ class ARC2_TestHandler extends ARC2_Class {
     $pass = ($r == $valid_r) ? 1 : 0;
     return array('pass' => $pass, 'info' => $valid_r);
   }
-  
+
   /*  */
-  
+
   function buildTurtleSelectQueryResult($index) {
     $rs = 'http://www.w3.org/2001/sw/DataAccess/tests/result-set#';
     $rdf = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
@@ -354,7 +354,7 @@ class ARC2_TestHandler extends ARC2_Class {
         if ($type['value'] == $rs . 'ResultSet') {
           $vars = $this->v($rs . 'resultVariable', array(), $props);
           foreach ($vars as $var) {
-            $r['variables'][] = $var['value'];            
+            $r['variables'][] = $var['value'];
           }
         }
       }
@@ -381,7 +381,7 @@ class ARC2_TestHandler extends ARC2_Class {
     }
     return $r;
   }
-  
+
   /*  */
 
   function buildArrayHashIndex($rows) {
@@ -398,14 +398,14 @@ class ARC2_TestHandler extends ARC2_Class {
   }
 
   /*  */
-  
+
   function adjustBnodes($result, $data) {
     $mappings = array(
       '_:b1371233574_bob' => '_:b10',
       '_:b1114277307_alice' => '_:b1f',
       '_:b1368422168_eve' => '_:b20',
       '_:b1638119969_fred' => '_:b21',
-      
+
       '_:b288335586_a' => array(
         'http://www.w3.org/2001/sw/DataAccess/tests/data-r2/distinct/manifest#no-distinct-3' => '_:b0',
         'http://www.w3.org/2001/sw/DataAccess/tests/data-r2/distinct/manifest#distinct-3' => '_:b0',

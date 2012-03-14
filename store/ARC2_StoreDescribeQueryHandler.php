@@ -12,10 +12,10 @@ ARC2::inc('StoreSelectQueryHandler');
 
 class ARC2_StoreDescribeQueryHandler extends ARC2_StoreSelectQueryHandler {
 
-  function __construct($a = '', &$caller) {/* caller has to be a store */
+  function __construct($a = '', $caller) {/* caller has to be a store */
     parent::__construct($a, $caller);
   }
-  
+
   function __init() {/* db_con */
     parent::__init();
     $this->store = $this->caller;
@@ -23,7 +23,7 @@ class ARC2_StoreDescribeQueryHandler extends ARC2_StoreSelectQueryHandler {
   }
 
   /*  */
-  
+
   function runQuery($infos) {
     $ids = $infos['query']['result_uris'];
     if ($vars = $infos['query']['result_vars']) {
@@ -52,24 +52,24 @@ class ARC2_StoreDescribeQueryHandler extends ARC2_StoreSelectQueryHandler {
       $this->described_ids[] = $id;
       if ($this->detect_labels) {
         $q = '
-          CONSTRUCT { 
-            <' . $id . '> ?p ?o . 
-            ?o ?label_p ?o_label . 
+          CONSTRUCT {
+            <' . $id . '> ?p ?o .
+            ?o ?label_p ?o_label .
             ?o <http://arc.semsol.org/ns/arc#label> ?o_label .
-          } WHERE { 
+          } WHERE {
             <' . $id . '> ?p ?o .
             OPTIONAL {
               ?o ?label_p ?o_label .
-              FILTER REGEX(str(?label_p), "(name|label|title|summary|nick|fn)$", "i") 
+              FILTER REGEX(str(?label_p), "(name|label|title|summary|nick|fn)$", "i")
             }
           }
         ';
       }
       else {
         $q = '
-          CONSTRUCT { 
-            <' . $id . '> ?p ?o . 
-          } WHERE { 
+          CONSTRUCT {
+            <' . $id . '> ?p ?o .
+          } WHERE {
             <' . $id . '> ?p ?o .
           }
         ';
@@ -81,9 +81,9 @@ class ARC2_StoreDescribeQueryHandler extends ARC2_StoreSelectQueryHandler {
     }
     return $this->r;
   }
-  
+
   /*  */
-  
+
   function mergeSubResults($index, $is_sub_describe = 1) {
     foreach ($index as $s => $ps) {
       if (!isset($this->r[$s])) $this->r[$s] = array();
@@ -111,7 +111,7 @@ class ARC2_StoreDescribeQueryHandler extends ARC2_StoreSelectQueryHandler {
       if (!in_array($id, $this->described_ids)) $this->ids[] = $id;
     }
   }
-  
+
   /*  */
 
 }

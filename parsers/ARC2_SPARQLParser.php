@@ -13,10 +13,6 @@ ARC2::inc('TurtleParser');
 
 class ARC2_SPARQLParser extends ARC2_TurtleParser {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-
   function __init() {
     parent::__init();
     $this->bnode_prefix = $this->v('bnode_prefix', 'arc'.substr(md5(uniqid(rand())), 0, 4).'b', $this->a);

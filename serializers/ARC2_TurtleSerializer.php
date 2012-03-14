@@ -26,33 +26,38 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
     $this->content_header = 'text/turtle';
   }
 
-  function occurrencesOfIdAsObject($id, &$index) {
+  function occurrencesOfIdAsObject($id, $index) {
       $count = 0;
       foreach($index as $s => $ps){
           foreach($ps as $p => $os){
-              if(in_array(array('value'=>$id,'type'=>'bnode'), $os) ) $count++;
+              if (in_array(array('value'=>$id,'type'=>'bnode'), $os)) {
+                  $count++;
+              }
           }
       }
       return $count;
   }
 
-  function resourceIsRdfList($id, &$index){
+  function resourceIsRdfList($id, $index){
       $rdftype = $this->expandPName('rdf:type');
       $rdfList = $this->expandPName('rdf:List');
       $rdffirst = $this->expandPName('rdf:first');
-      if(isset($index[$id][$rdffirst])) return true;
-       if(isset($index[$id]) && isset($index[$id][$rdftype])){
+      if (isset($index[$id][$rdffirst])) {
+          return true;
+      }
+       if (isset($index[$id]) && isset($index[$id][$rdftype])) {
            $types = $index[$id][$rdftype];
            return in_array(array('value' => $rdfList, 'type'=> 'uri'), $types);
        }
        return null;
   }
 
-  function listToHash($listID, &$index){
+  function listToHash($listID, $index){
       $array = array();
-            $rdffirst = $this->expandPName('rdf:first');
-            $rdfrest = $this->expandPName('rdf:rest');
-            $rdfnil = $this->expandPName('rdf:nil');
+      $rdffirst = $this->expandPName('rdf:first');
+      $rdfrest = $this->expandPName('rdf:rest');
+      $rdfnil = $this->expandPName('rdf:nil');
+
       while(!empty($listID) AND $listID !=$rdfnil){
           $array[$listID]=$index[$listID][$rdffirst][0];
           $listID = $index[$listID][$rdfrest][0]['value'];
@@ -63,7 +68,7 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
 
   /*  */
 
-  function getTerm($v, $term = '', $qualifier = '', &$index=array()) {
+  function getTerm($v, $term = '', $qualifier = '', $index=array()) {
     if (!is_array($v)) {
       if (preg_match('/^\_\:/', $v)) {
         $objectCount =$this->occurrencesOfIdAsObject($v, $index);
@@ -142,7 +147,7 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
     return $r ? $this->getHead() . $nl . $nl . $r : '';
   }
 
-  function _serialiseResource($s, &$index, $nesting=0, $nl="\n"){
+  function _serialiseResource($s, $index, $nesting=0, $nl="\n"){
       $r='';
       if(!isset($index[$s])) return $r;
       else $ps = $index[$s];

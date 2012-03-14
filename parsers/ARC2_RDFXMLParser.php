@@ -114,7 +114,7 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
 
   /*  */
 
-  function pushS(&$s) {
+  function pushS($s) {
     $s['pos'] = $this->s_count;
     $this->s_stack[$this->s_count] = $s;
     $this->s_count++;

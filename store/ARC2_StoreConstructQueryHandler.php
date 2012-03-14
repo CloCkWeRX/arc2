@@ -12,17 +12,17 @@ ARC2::inc('StoreSelectQueryHandler');
 
 class ARC2_StoreConstructQueryHandler extends ARC2_StoreSelectQueryHandler {
 
-  function __construct($a = '', &$caller) {/* caller has to be a store */
+  function __construct($a = '', $caller) {/* caller has to be a store */
     parent::__construct($a, $caller);
   }
-  
+
   function __init() {/* db_con */
     parent::__init();
     $this->store = $this->caller;
   }
 
   /*  */
-  
+
   function runQuery($infos) {
     $this->infos = $infos;
     $this->buildResultVars();
@@ -34,9 +34,9 @@ class ARC2_StoreConstructQueryHandler extends ARC2_StoreSelectQueryHandler {
     }
     return $this->getResultIndex($sub_r);
   }
-  
+
   /*  */
-  
+
   function buildResultVars() {
     $r = array();
     foreach ($this->infos['query']['construct_triples'] as $t) {
@@ -107,7 +107,7 @@ class ARC2_StoreConstructQueryHandler extends ARC2_StoreSelectQueryHandler {
     }
     return $r;
   }
-  
+
   /*  */
 
 }

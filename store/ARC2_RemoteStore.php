@@ -12,11 +12,11 @@ ARC2::inc('Class');
 
 class ARC2_RemoteStore extends ARC2_Class {
 
-  function __construct($a, &$caller) {
+  function __construct($a, $caller) {
     parent::__construct($a, $caller);
     $this->is_remote = 1;
   }
-  
+
   function __init() {
     parent::__init();
   }
@@ -26,21 +26,21 @@ class ARC2_RemoteStore extends ARC2_Class {
   function isSetUp() {
     return 1;
   }
-  
+
   function setUp() {}
 
   function killDBProcesses() {}
-  
+
   /*  */
-  
+
   function reset() {}
-  
+
   function drop() {}
-  
+
   function insert($doc, $g, $keep_bnode_ids = 0) {
     return $this->query('INSERT INTO <' . $g . '> { ' . $this->toNTriples($doc, '', 1) . ' }');
   }
-  
+
   function delete($doc, $g) {
     if (!$doc) {
       return $this->query('DELETE FROM <' . $g . '>');
@@ -49,13 +49,13 @@ class ARC2_RemoteStore extends ARC2_Class {
       return $this->query('DELETE FROM <' . $g . '> { ' . $this->toNTriples($doc, '', 1) . ' }');
     }
   }
-  
+
   function replace($doc, $g, $doc_2) {
     return array($this->delete($doc, $g), $this->insert($doc_2, $g));
   }
-  
+
   /*  */
-  
+
   function query($q, $result_format = '', $src = '', $keep_bnode_ids = 0, $log_query = 0) {
     if ($log_query) $this->logQuery($q);
     ARC2::inc('SPARQLPlusParser');
@@ -171,11 +171,11 @@ class ARC2_RemoteStore extends ARC2_Class {
     unset($parser);
     return $r;
   }
-  
+
   /*  */
-  
+
   function optimizeTables() {}
-  
+
   /*  */
 
   function getResourceLabel($res, $unnamed_label = 'An unnamed resource') {
@@ -198,7 +198,7 @@ class ARC2_RemoteStore extends ARC2_Class {
     $this->resource_labels[$res] = $r;
     return $r;
   }
-  
+
   function getDomains($p) {
     $r = array();
     foreach($this->query('SELECT DISTINCT ?type WHERE {?s <' . $p . '> ?o ; a ?type . }', 'rows') as $row) {
@@ -208,5 +208,5 @@ class ARC2_RemoteStore extends ARC2_Class {
   }
 
   /*  */
-  
+
 }

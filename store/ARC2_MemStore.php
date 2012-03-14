@@ -12,11 +12,11 @@ ARC2::inc('Class');
 
 class ARC2_MemStore extends ARC2_Class {
 
-  function __construct($a, &$caller) {
+  function __construct($a, $caller) {
     parent::__construct($a, $caller);
     $this->is_mem = 1;
   }
-  
+
   function __init() {
     parent::__init();
     $this->data = array();
@@ -27,15 +27,15 @@ class ARC2_MemStore extends ARC2_Class {
   function isSetUp() {
     return 1;
   }
-  
+
   function setUp() {}
-  
+
   /*  */
-  
+
   function reset() {
     $this->data = array();
   }
-  
+
   function drop() {
     $this->reset();
   }
@@ -46,11 +46,11 @@ class ARC2_MemStore extends ARC2_Class {
     $index = $this->v($g, array(), $this->data);
     $this->data[$g] = ARC2::getMergedIndex($index, $this->toIndex($doc));
   }
-  
+
   /*  */
   /*  */
 
-  
+
   function delete($doc, $g = 'http://localhost/') {
     $index = $this->v($g, array(), $this->data);
     $this->data[$g] = ARC2::getCleanedIndex($index, $this->toIndex($doc));
@@ -59,9 +59,9 @@ class ARC2_MemStore extends ARC2_Class {
   function replace($doc, $g, $doc_2) {
     return array($this->delete($doc, $g), $this->insert($doc_2, $g));
   }
-  
+
   /*  */
-  
+
   function query($q, $result_format = '', $src = '', $keep_bnode_ids = 0, $log_query = 0) {
     if ($log_query) $this->logQuery($q);
     ARC2::inc('SPARQLPlusParser');
@@ -163,11 +163,11 @@ class ARC2_MemStore extends ARC2_Class {
     /* any other */
     return $parser->getSimpleIndex(0);
   }
-  
+
   /*  */
-  
+
   function optimizeTables() {}
-  
+
   /*  */
 
   function getResourceLabel($res, $unnamed_label = 'An unnamed resource') {

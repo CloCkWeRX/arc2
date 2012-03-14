@@ -12,23 +12,19 @@ ARC2::inc('StoreQueryHandler');
 
 class ARC2_StoreLoadQueryHandler extends ARC2_StoreQueryHandler {
 
-  function __construct($a = '', &$caller) {/* caller has to be a store */
-    parent::__construct($a, $caller);
-  }
-  
   function __init() {/* db_con, store_log_inserts */
     parent::__init();
     $this->store = $this->caller;
     $this->write_buffer_size = $this->v('store_write_buffer', 2500, $this->a);
-    /* Beware! Splitting is not fully supported yet. You won't be able to 
-       to query your data if you split tables. Better don't touch this, 
+    /* Beware! Splitting is not fully supported yet. You won't be able to
+       to query your data if you split tables. Better don't touch this,
        unless you know what you are doing! */
     $this->split_threshold = $this->v('store_split_threshold', 0, $this->a);
     $this->strip_mb_comp_str = $this->v('store_strip_mb_comp_str', 0, $this->a);
   }
 
   /*  */
-  
+
   function runQuery($infos, $data = '', $keep_bnode_ids = 0) {
     $url = $infos['query']['url'];
     $graph = $infos['query']['target_graph'];
@@ -41,13 +37,13 @@ class ARC2_StoreLoadQueryHandler extends ARC2_StoreQueryHandler {
     $reader->activate($url, $data);
     /* format detection */
     $mappings = array(
-      'rdfxml' => 'RDFXML', 
-      'sparqlxml' => 'SPOG', 
-      'turtle' => 'Turtle', 
-      'ntriples' => 'Turtle', 
+      'rdfxml' => 'RDFXML',
+      'sparqlxml' => 'SPOG',
+      'turtle' => 'Turtle',
+      'ntriples' => 'Turtle',
       'rss' => 'RSS',
       'atom' => 'Atom',
-      'n3' => 'Turtle', 
+      'n3' => 'Turtle',
       'html' => 'SemHTML',
       'sgajson' => 'SGAJSON',
       'cbjson' => 'CBJSON'
@@ -108,7 +104,7 @@ class ARC2_StoreLoadQueryHandler extends ARC2_StoreQueryHandler {
     }
     return $r;
   }
-  
+
   /*  */
 
   function addT($s, $p, $o, $s_type, $o_type, $o_dt = '', $o_lang = '') {
@@ -124,7 +120,7 @@ class ARC2_StoreLoadQueryHandler extends ARC2_StoreQueryHandler {
       'o' => $this->getStoredTermID($o, $type_ids[$o_type], 'o'),
       'o_lang_dt' => $this->getStoredTermID($o_dt . $o_lang, $o_dt ? '0' : '2', 'id'),
       'o_comp' => $this->getOComp($o),
-      's_type' => $type_ids[$s_type], 
+      's_type' => $type_ids[$s_type],
       'o_type' => $type_ids[$o_type],
     );
     $t['t'] = $this->getTripleID($t);
@@ -150,7 +146,7 @@ class ARC2_StoreLoadQueryHandler extends ARC2_StoreQueryHandler {
   }
 
   /*  */
-  
+
   function getMaxTermID() {
     $con = $this->store->getDBCon();
     $sql = '';
@@ -166,7 +162,7 @@ class ARC2_StoreLoadQueryHandler extends ARC2_StoreQueryHandler {
     }
     return $r + 1;
   }
-  
+
   function getMaxTripleID() {
     $con = $this->store->getDBCon();
     $sql = "SELECT MAX(t) AS `id` FROM " . $this->store->getTablePrefix() . "triple";
@@ -246,7 +242,7 @@ class ARC2_StoreLoadQueryHandler extends ARC2_StoreQueryHandler {
       return array($this->triple_ids[$val]);/* hack for "don't insert this triple" */
     }
     /* db */
-    $sql = "SELECT t FROM " . $this->store->getTablePrefix() . "triple WHERE 
+    $sql = "SELECT t FROM " . $this->store->getTablePrefix() . "triple WHERE
       s = " . $t['s'] . " AND p = " . $t['p'] . " AND o = " . $t['o'] . " AND o_lang_dt = " . $t['o_lang_dt'] . " AND s_type = " . $t['s_type'] . " AND o_type = " . $t['o_type'] . "
       LIMIT 1
     ";
@@ -258,14 +254,14 @@ class ARC2_StoreLoadQueryHandler extends ARC2_StoreQueryHandler {
     else {
       $this->triple_ids[$val] = $this->max_triple_id;
       $this->max_triple_id++;
-      
+
       /* split tables ? */
       if (0 && $this->split_threshold && !($this->max_triple_id % $this->split_threshold)) {
         $this->store->splitTables();
         $this->dropMergeTable();
         $this->createMergeTable();
       }
-      
+
       /* tables must also be upgraded if the number of triples exceeds.
          The triple id can't be stored otherwise. So upgrade! */
       if (($this->column_type == 'mediumint') && ($this->max_triple_id >= 16750000)) {
@@ -275,7 +271,7 @@ class ARC2_StoreLoadQueryHandler extends ARC2_StoreQueryHandler {
       return $this->triple_ids[$val];
     }
   }
-  
+
   function getOComp($val) {
     /* try date (e.g. 21 August 2007) */
     if (preg_match('/^[0-9]{1,2}\s+[a-z]+\s+[0-9]{4}/i', $val) && ($uts = strtotime($val)) && ($uts !== -1)) {
@@ -334,7 +330,7 @@ class ARC2_StoreLoadQueryHandler extends ARC2_StoreQueryHandler {
   }
 
   /*  */
-  
+
   function bufferTripleSQL($t) {
     $con = $this->store->getDBCon();
     $tbl = 'triple';
@@ -345,7 +341,7 @@ class ARC2_StoreLoadQueryHandler extends ARC2_StoreQueryHandler {
     }
     $this->sql_buffers[$tbl] .= $sql . "(" . $t['t'] . ", " . $t['s'] . ", " . $t['p'] . ", " . $t['o'] . ", " . $t['o_lang_dt'] . ", '" . mysql_real_escape_string($t['o_comp'], $con) . "', " . $t['s_type'] . ", " . $t['o_type'] . ")";
   }
-  
+
   function bufferGraphSQL($g2t) {
     $tbl = 'g2t';
     $sql = ", ";
@@ -355,7 +351,7 @@ class ARC2_StoreLoadQueryHandler extends ARC2_StoreQueryHandler {
     }
     $this->sql_buffers[$tbl] .= $sql . "(" . $g2t['g'] . ", " . $g2t['t'] . ")";
   }
-  
+
   function bufferIDSQL($tbl, $id, $val, $val_type) {
     $con = $this->store->getDBCon();
     $tbl = $tbl . '2val';
@@ -381,7 +377,7 @@ class ARC2_StoreLoadQueryHandler extends ARC2_StoreQueryHandler {
     $sql .= $vals;
     $this->sql_buffers[$tbl] .= $sql;
   }
-  
+
   /*  */
 
   function checkSQLBuffers($force_write = 0, $reset_id_buffers = 0, $refresh_lock = 0, $split_tables = 0) {
@@ -443,7 +439,7 @@ class ARC2_StoreLoadQueryHandler extends ARC2_StoreQueryHandler {
   }
 
   /* speed log */
-  
+
   function logInserts() {
     $t_start = $this->t_start;
     $t_prev = $this->t_prev;
@@ -451,18 +447,18 @@ class ARC2_StoreLoadQueryHandler extends ARC2_StoreQueryHandler {
     $tc_prev = $this->t_count_prev;
     $tc_now = $this->t_count;
     $tc_diff = $tc_now - $tc_prev;
-    
+
     $dur_full = $t_now - $t_start;
     $dur_diff = $t_now - $t_prev;
 
     $speed_full = round($tc_now / $dur_full);
     $speed_now = round($tc_diff / $dur_diff);
 
-    $r = $tc_diff . ' in ' . round($dur_diff, 5) . ' = ' . $speed_now . ' t/s  (' .$tc_now. ' in ' . round($dur_full, 5). ' = ' . $speed_full . ' t/s )'; 
+    $r = $tc_diff . ' in ' . round($dur_diff, 5) . ' = ' . $speed_now . ' t/s  (' .$tc_now. ' in ' . round($dur_full, 5). ' = ' . $speed_full . ' t/s )';
     $fp = @fopen("arc_insert_log.txt", "a");
     @fwrite($fp, $r . "\r\n");
     @fclose($fp);
-    
+
     $this->t_prev = $t_now;
     $this->t_count_prev = $tc_now;
   }
