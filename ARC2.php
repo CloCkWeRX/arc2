@@ -8,10 +8,6 @@
  * @package ARC2
  */
 
-/* E_STRICT hack */
-if (function_exists('date_default_timezone_get')) {
-  date_default_timezone_set(@date_default_timezone_get());
-}
 
 class ARC2 {
 
