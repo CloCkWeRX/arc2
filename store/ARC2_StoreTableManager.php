@@ -12,17 +12,14 @@ ARC2::inc('Store');
 
 class ARC2_StoreTableManager extends ARC2_Store {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {/* db_con */
     parent::__init();
     $this->engine_type = $this->v('store_engine_type', 'MyISAM', $this->a);
   }
 
   /*  */
-  
+
   function getTableOptionsCode() {
     $v = $this->getDBVersion();
     $r = "";
@@ -33,9 +30,9 @@ class ARC2_StoreTableManager extends ARC2_Store {
     $r .= " DELAY_KEY_WRITE = 1";
     return $r;
   }
-  
+
   /*  */
-  
+
   function createTables() {
     $con = $this->getDBCon();
     if(!$this->createTripleTable()) {
@@ -58,9 +55,9 @@ class ARC2_StoreTableManager extends ARC2_Store {
     }
     return 1;
   }
-  
+
   /*  */
-  
+
   function createTripleTable($suffix = 'triple') {
     /* keep in sync with merge def in StoreQueryHandler ! */
     $indexes = $this->v('store_indexes', array('sp (s,p)', 'os (o,s)', 'po (p,o)'), $this->a);
@@ -93,9 +90,9 @@ class ARC2_StoreTableManager extends ARC2_Store {
     ";
     return mysql_query($sql, $this->getDBCon());
   }
-  
+
   /*  */
-  
+
   function createG2TTable() {
     $sql = "
       CREATE TABLE IF NOT EXISTS " . $this->getTablePrefix() . "g2t (
@@ -105,8 +102,8 @@ class ARC2_StoreTableManager extends ARC2_Store {
       ) ". $this->getTableOptionsCode() . "
     ";
     return mysql_query($sql, $this->getDBCon());
-  }  
-  
+  }
+
   function extendG2tTableColumns($suffix = 'g2t') {
     $sql = "
       ALTER TABLE " . $this->getTablePrefix() . $suffix . "
@@ -117,7 +114,7 @@ class ARC2_StoreTableManager extends ARC2_Store {
   }
 
   /*  */
-  
+
   function createID2ValTable() {
     $sql = "
       CREATE TABLE IF NOT EXISTS " . $this->getTablePrefix() . "id2val (
@@ -129,8 +126,8 @@ class ARC2_StoreTableManager extends ARC2_Store {
       ) ". $this->getTableOptionsCode() . "
     ";
     return mysql_query($sql, $this->getDBCon());
-  }  
-  
+  }
+
   function extendId2valTableColumns($suffix = 'id2val') {
     $sql = "
       ALTER TABLE " . $this->getTablePrefix() . $suffix . "
@@ -140,7 +137,7 @@ class ARC2_StoreTableManager extends ARC2_Store {
   }
 
   /*  */
-  
+
   function createS2ValTable() {
     //$indexes = 'UNIQUE KEY (id), KEY vh (val_hash), KEY v (val(64))';
     $indexes = 'UNIQUE KEY (id), KEY vh (val_hash)';
@@ -154,8 +151,8 @@ class ARC2_StoreTableManager extends ARC2_Store {
       ) " . $this->getTableOptionsCode() . "
     ";
     return mysql_query($sql, $this->getDBCon());
-  }  
-  
+  }
+
   function extendS2valTableColumns($suffix = 's2val') {
     $sql = "
       ALTER TABLE " . $this->getTablePrefix() . $suffix . "
@@ -165,7 +162,7 @@ class ARC2_StoreTableManager extends ARC2_Store {
   }
 
   /*  */
-  
+
   function createO2ValTable() {
     /* object value index, e.g. "KEY v (val(64))" and/or "FULLTEXT KEY vft (val)" */
     $val_index = $this->v('store_object_index', 'KEY v (val(64))', $this->a);
@@ -180,8 +177,8 @@ class ARC2_StoreTableManager extends ARC2_Store {
       ) ". $this->getTableOptionsCode() . "
     ";
     return mysql_query($sql, $this->getDBCon());
-  }  
-  
+  }
+
   function extendO2valTableColumns($suffix = 'o2val') {
     $sql = "
       ALTER TABLE " . $this->getTablePrefix() . $suffix . "
@@ -191,7 +188,7 @@ class ARC2_StoreTableManager extends ARC2_Store {
   }
 
   /*  */
-  
+
   function createSettingTable() {
     $sql = "
       CREATE TABLE IF NOT EXISTS " . $this->getTablePrefix() . "setting (
@@ -201,8 +198,8 @@ class ARC2_StoreTableManager extends ARC2_Store {
       ) ". $this->getTableOptionsCode() . "
     ";
     return mysql_query($sql, $this->getDBCon());
-  }  
-  
+  }
+
   /*  */
 
   function extendColumns() {

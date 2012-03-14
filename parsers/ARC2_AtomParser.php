@@ -12,10 +12,7 @@ ARC2::inc('LegacyXMLParser');
 
 class ARC2_AtomParser extends ARC2_LegacyXMLParser {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {/* reader */
     parent::__init();
     $this->triples = array();
@@ -28,24 +25,24 @@ class ARC2_AtomParser extends ARC2_LegacyXMLParser {
     $this->cache = array();
     $this->allowCDataNodes = 0;
   }
-  
+
   /*  */
-  
+
   function done() {
     $this->extractRDF();
   }
-  
+
   /*  */
-  
+
   function setReader(&$reader) {
     $this->reader = $reader;
   }
-  
+
   function createBnodeID(){
     $this->bnode_id++;
     return '_:' . $this->bnode_prefix . $this->bnode_id;
   }
-  
+
   function addT($t) {
     //if (!isset($t['o_datatype']))
     if ($this->skip_dupes) {
@@ -70,7 +67,7 @@ class ARC2_AtomParser extends ARC2_LegacyXMLParser {
   function countTriples() {
     return $this->t_count;
   }
-  
+
   function getSimpleIndex($flatten_objects = 1, $vals = '') {
     return ARC2::getSimpleIndex($this->getTriples(), $flatten_objects, $vals);
   }
@@ -125,19 +122,19 @@ class ARC2_AtomParser extends ARC2_LegacyXMLParser {
       }
     }
   }
-  
+
   function extractChannel($els) {
     list($props, $sub_index) = $this->extractProps($els, 'channel');
     $uri = $props[$this->rss . 'link'][0]['value'];
     return ARC2::getMergedIndex(array($uri => $props), $sub_index);
   }
-  
+
   function extractItem($els) {
     list($props, $sub_index) = $this->extractProps($els, 'item');
     $uri = $props[$this->rss . 'link'][0]['value'];
     return ARC2::getMergedIndex(array($uri => $props), $sub_index);
   }
-  
+
   function extractProps($els, $container) {
     $r = array($this->rdf . 'type' => array(array('value' => $this->rss . $container, 'type' => 'uri')));
     $sub_index = array();
@@ -224,7 +221,7 @@ class ARC2_AtomParser extends ARC2_LegacyXMLParser {
     }
     return array($r, $sub_index);
   }
-  
+
   function initXMLParser() {
     if (!isset($this->xml_parser)) {
       $enc = preg_match('/^(utf\-8|iso\-8859\-1|us\-ascii)$/i', $this->getEncoding(), $m) ? $m[1] : 'UTF-8';

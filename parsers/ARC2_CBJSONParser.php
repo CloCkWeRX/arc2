@@ -13,10 +13,7 @@ ARC2::inc('JSONParser');
 
 class ARC2_CBJSONParser extends ARC2_JSONParser {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {/* reader */
     parent::__init();
     $this->base = 'http://cb.semsol.org/';
@@ -24,13 +21,13 @@ class ARC2_CBJSONParser extends ARC2_JSONParser {
     $this->default_ns = $this->base . 'ns#';
     $this->nsp = array($this->rdf => 'rdf');
   }
-  
+
   /*  */
 
   function done() {
     $this->extractRDF();
   }
-  
+
   function extractRDF() {
     $struct = $this->struct;
     if ($type = $this->getStructType($struct)) {
@@ -41,7 +38,7 @@ class ARC2_CBJSONParser extends ARC2_JSONParser {
       $this->extractResourceRDF($struct, $s);
     }
   }
-  
+
   function getStructType($struct, $rel = '') {
     /* url-based */
     if ($url = $this->v('crunchbase_url', '', $struct)) {
@@ -63,14 +60,14 @@ class ARC2_CBJSONParser extends ARC2_JSONParser {
     if (isset($struct['providerships']) && is_array($struct['providerships'])) return 'service-provider';
     return '';
   }
-  
+
   function getResourceID($struct, $type) {
     if ($type && isset($struct['permalink'])) {
       return $this->base . $type . '/' . $struct['permalink'] . '#self';
     }
     return $this->createBnodeID();
   }
-  
+
   function getPropertyURI($name, $ns = '') {
     if (!$ns) $ns = $this->default_ns;
     if (preg_match('/^(product|funding_round|investment|acquisition|.+ship|office|milestone|.+embed|.+link|degree|fund)s/', $name, $m)) $name = $m[1];
@@ -84,9 +81,9 @@ class ARC2_CBJSONParser extends ARC2_JSONParser {
     if (preg_match('/(office|ship|investment|milestone|fund|embed|link)s$/', $k)) $k = substr($k, 0, -1);
     return $s . $k . '-' . ($pos + 1) . '#self';
   }
-  
+
   /*  */
-  
+
   function extractResourceRDF($struct, $s, $pos = 0) {
     $s_type = preg_match('/^\_\:/', $s) ? 'bnode' : 'uri';
     $date_prefixes = array();
@@ -144,9 +141,9 @@ class ARC2_CBJSONParser extends ARC2_JSONParser {
       return is_numeric($k) ? 1 : 0;
     }
   }
-  
+
   /*  */
-  
+
   function extractTagListRDF($s, $s_type,  $v) {
     if (!$v) return 0;
     $tags = preg_split('/\, /', $v);
@@ -175,7 +172,7 @@ class ARC2_CBJSONParser extends ARC2_JSONParser {
       $this->extractImageRDF($s, $s_type, $sub_v, 'screenshot');
     }
   }
-  
+
   function extractProductsRDF($s, $s_type, $v) {
     foreach ($v as $sub_v) {
       $o = $this->getResourceID($sub_v, 'product');
@@ -212,7 +209,7 @@ class ARC2_CBJSONParser extends ARC2_JSONParser {
       }
     }
   }
-  
+
   function extractExternalLinksRDF($s, $s_type, $v) {
     foreach ($v as $sub_v) {
       $href = $sub_v['external_url'];
@@ -263,5 +260,5 @@ class ARC2_CBJSONParser extends ARC2_JSONParser {
       $this->addT($s, $this->getPropertyURI($prefix . '_date'), $r, $s_type, 'literal');
     }
   }
-  
+
 }

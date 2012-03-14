@@ -12,10 +12,7 @@ ARC2::inc('Class');
 
 class ARC2_LegacyXMLParser extends ARC2_Class {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {/* reader */
     parent::__init();
     $this->encoding = $this->v('encoding', false, $this->a);
@@ -28,7 +25,7 @@ class ARC2_LegacyXMLParser extends ARC2_Class {
     $this->target_encoding = '';
     $this->keep_cdata_ws = $this->v('keep_cdata_whitespace', 0, $this->a);
   }
-  
+
   /*  */
 
   function setReader(&$reader) {
@@ -82,9 +79,9 @@ class ARC2_LegacyXMLParser extends ARC2_Class {
     unset($this->reader);
     return $this->done();
   }
-  
+
   /*  */
-  
+
   function getEncoding($src = 'config') {
     if ($src == 'parser') {
       return $this->target_encoding;
@@ -96,17 +93,17 @@ class ARC2_LegacyXMLParser extends ARC2_Class {
   }
 
   /*  */
-  
+
   function done() {
-  
+
   }
-  
+
   /*  */
-  
+
   function getStructure() {
     return array('nodes' => $this->v('nodes', array()));
   }
-  
+
   /*  */
 
   function getNodeIndex(){
@@ -133,11 +130,11 @@ class ARC2_LegacyXMLParser extends ARC2_Class {
   function getNodes() {
     return $this->nodes;
   }
-  
+
   function getSubNodes($n) {
     return $this->v($n['id'], array(), $this->getNodeIndex());
   }
-  
+
   function getNodeContent($n, $outer = 0, $trim = 1) {
     //echo '<pre>' . htmlspecialchars(print_r($n, 1)) . '</pre>';
     if ($n['tag'] == 'cdata') {
@@ -171,13 +168,13 @@ class ARC2_LegacyXMLParser extends ARC2_Class {
   }
 
   /*  */
-  
+
   function pushNode($n) {
     $n['id'] = $this->node_count;
     $this->nodes[$this->node_count] = $n;
     $this->node_count++;
   }
-  
+
   function getCurNode($t = '') {
     $i = 1;
     do {
@@ -187,7 +184,7 @@ class ARC2_LegacyXMLParser extends ARC2_Class {
     } while (!$found && isset($this->nodes[$this->node_count - $i]));
     return $r;
   }
-  
+
   function updateNode($node) {/* php4-save */
     $this->nodes[$node['id']] = $node;
   }
@@ -209,7 +206,7 @@ class ARC2_LegacyXMLParser extends ARC2_Class {
   }
 
   /*  */
-  
+
   function open($p, $t, $a) {
     $t_exact = $t;
     //echo "<br />\n".'opening '.$t . ' ' . print_r($a, 1); flush();
@@ -239,8 +236,8 @@ class ARC2_LegacyXMLParser extends ARC2_Class {
     $node = array(
       'tag' => $t,
       'tag_exact' => $t_exact,
-      'a' => $a, 
-      'level' => $this->level, 
+      'a' => $a,
+      'level' => $this->level,
       'pos' => 0,
       'p_id' => $this->node_count-1,
       'state' => 'open',
@@ -299,7 +296,7 @@ class ARC2_LegacyXMLParser extends ARC2_Class {
       }
     }
   }
-  
+
   function nsDecl($p, $prf, $uri) {
     if (is_array($uri)) return 1;
     $this->ns[$prf] = $uri;
@@ -307,5 +304,5 @@ class ARC2_LegacyXMLParser extends ARC2_Class {
   }
 
   /*  */
-  
+
 }

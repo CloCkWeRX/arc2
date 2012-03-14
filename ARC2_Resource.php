@@ -13,10 +13,7 @@ ARC2::inc('Class');
 
 class ARC2_Resource extends ARC2_Class {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {
     parent::__init();
     $this->uri = '';
@@ -26,7 +23,7 @@ class ARC2_Resource extends ARC2_Class {
   }
 
   /*  */
-  
+
   function setURI($uri) {
     $this->uri = $uri;
   }
@@ -79,7 +76,7 @@ class ARC2_Resource extends ARC2_Class {
   }
 
   /*  */
-  
+
   function getProps($p = '', $s = '') {
     if (!$s) $s = $this->uri;
     if (!$s) return array();

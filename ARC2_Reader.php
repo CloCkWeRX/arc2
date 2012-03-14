@@ -13,10 +13,7 @@ ARC2::inc('Class');
 
 class ARC2_Reader extends ARC2_Class {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {/* inc_path, proxy_host, proxy_port, proxy_skip, http_accept_header, http_user_agent_header, max_redirects */
     parent::__init();
     $this->http_method = $this->v('http_method', 'GET', $this->a);
@@ -35,7 +32,7 @@ class ARC2_Reader extends ARC2_Class {
   }
 
   /*  */
-  
+
   function setHTTPMethod($v) {
     $this->http_method = $v;
   }
@@ -179,7 +176,7 @@ class ARC2_Reader extends ARC2_Class {
   }
 
   /*  */
-  
+
   function createStream($path, $data = '') {
     $this->base = $this->calcBase($path);
     $this->stream = ($data) ? $this->getDataStream($data) : $this->getSocketStream($this->base);
@@ -188,7 +185,7 @@ class ARC2_Reader extends ARC2_Class {
   function getDataStream($data) {
     return array('type' => 'data', 'pos' => 0, 'headers' => array(), 'size' => strlen($data), 'data' => $data, 'buffer' => '');
   }
-  
+
   function getSocketStream($url) {
     if ($url == 'file://') {
       return $this->addError('Error: file does not exists or is not accessible');
@@ -199,7 +196,7 @@ class ARC2_Reader extends ARC2_Class {
       return $this->m('get' . $scheme . 'Socket', $url, $this->getDataStream(''));
     }
   }
-  
+
   function getFileSocket($url) {
     $parts = parse_url($url);
     $s = file_exists($parts['path']) ? @fopen($parts['path'], 'rb') : false;
@@ -208,7 +205,7 @@ class ARC2_Reader extends ARC2_Class {
     }
     return array('type' => 'socket', 'socket' =>& $s, 'headers' => array(), 'pos' => 0, 'size' => filesize($parts['path']), 'buffer' => '');
   }
-  
+
   function getHTTPSocket($url, $redirs = 0, $prev_parts = '') {
     $parts = parse_url($url);
     /* relative redirect */
@@ -367,7 +364,7 @@ class ARC2_Reader extends ARC2_Class {
     $this->stream = $s;
     return $r . $d;
   }
-  
+
   function closeStream() {
     if (isset($this->stream)) {
       if ($this->v('type', 0, $this->stream) == 'socket') {
@@ -376,9 +373,9 @@ class ARC2_Reader extends ARC2_Class {
       unset($this->stream);
     }
   }
-  
+
   /*  */
-  
+
   function getFormat() {
     if (!$this->format) {
       if (!$this->v('stream')) {
@@ -392,7 +389,7 @@ class ARC2_Reader extends ARC2_Class {
     }
     return $this->format;
   }
-    
+
   /*  */
 
   function getResponseHeaders() {
@@ -401,7 +398,7 @@ class ARC2_Reader extends ARC2_Class {
     }
     return $this->response_headers;
   }
-  
+
   function getEncoding($default = 'UTF-8') {
     return $this->v1('encoding', $default, $this->stream['headers']);
   }
@@ -413,7 +410,7 @@ class ARC2_Reader extends ARC2_Class {
   function getAuthInfos() {
     return $this->auth_infos;
   }
-  
+
   /*  */
-  
+
 }

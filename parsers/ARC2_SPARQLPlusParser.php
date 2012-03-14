@@ -12,16 +12,13 @@ ARC2::inc('SPARQLParser');
 
 class ARC2_SPARQLPlusParser extends ARC2_SPARQLParser {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {
     parent::__init();
   }
 
   /* +1 */
-  
+
   function xQuery($v) {
     list($r, $v) = $this->xPrologue($v);
     foreach (array('Select', 'Construct', 'Describe', 'Ask', 'Insert', 'Delete', 'Load') as $type) {
@@ -34,7 +31,7 @@ class ARC2_SPARQLPlusParser extends ARC2_SPARQLParser {
   }
 
   /* +3 */
-  
+
   function xResultVar($v) {
     $aggregate = '';
     /* aggregate */
@@ -57,7 +54,7 @@ class ARC2_SPARQLPlusParser extends ARC2_SPARQLParser {
   }
 
   /* +4 */
- 
+
   function xLoadQuery($v) {
     if ($sub_r = $this->x('LOAD\s+', $v)) {
       $sub_v = $sub_r[1];
@@ -74,9 +71,9 @@ class ARC2_SPARQLPlusParser extends ARC2_SPARQLParser {
     }
     return array(0, $v);
   }
-  
+
   /* +5 */
-  
+
   function xInsertQuery($v) {
     if ($sub_r = $this->x('INSERT\s+', $v)) {
       $r = array(
@@ -121,7 +118,7 @@ class ARC2_SPARQLPlusParser extends ARC2_SPARQLParser {
   }
 
   /* +6 */
-  
+
   function xDeleteQuery($v) {
     if ($sub_r = $this->x('DELETE\s+', $v)) {
       $r = array(
@@ -164,9 +161,9 @@ class ARC2_SPARQLPlusParser extends ARC2_SPARQLParser {
     }
     return array(0, $v);
   }
-  
+
   /* +7 */
-  
+
   function xSolutionModifier($v) {
     $r = array();
     if ((list($sub_r, $sub_v) = $this->xGroupClause($v)) && $sub_r) {
@@ -207,4 +204,4 @@ class ARC2_SPARQLPlusParser extends ARC2_SPARQLParser {
     return array(0, $v);
   }
 
-}  
+}

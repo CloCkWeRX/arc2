@@ -20,10 +20,7 @@ ARC2::inc('RDFSerializer');
 
 class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {
     parent::__init();
     $this->content_header = 'text/turtle';
@@ -38,7 +35,7 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
       }
       return $count;
   }
-  
+
   function resourceIsRdfList($id, &$index){
       $rdftype = $this->expandPName('rdf:type');
       $rdfList = $this->expandPName('rdf:List');
@@ -62,15 +59,15 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
       }
       return $array;
   }
-  
+
 
   /*  */
-  
+
   function getTerm($v, $term = '', $qualifier = '', &$index=array()) {
     if (!is_array($v)) {
       if (preg_match('/^\_\:/', $v)) {
-        $objectCount =$this->occurrencesOfIdAsObject($v, $index);  
-        if($objectCount<2){ //singleton bnode 
+        $objectCount =$this->occurrencesOfIdAsObject($v, $index);
+        if($objectCount<2){ //singleton bnode
              return '[';  /* getSerializedIndex will fill in the  ] at the end */
         } else {
             return $v;
@@ -95,7 +92,7 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
       return $this->getTerm($v['value'], $term, $qualifier);
     }
     /* literal */
-    $quot = '"';        
+    $quot = '"';
       if (preg_match('/\"/', $v['value']) || preg_match('/[\x0d\x0a]/', $v['value'])) {
         $quot = '"""';
         if (preg_match('/\"\"\"/', $v['value']) || preg_match('/\"$/', $v['value']) || preg_match('/^\"/', $v['value'])) {
@@ -112,7 +109,7 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
     $suffix = isset($v['datatype']) && $v['datatype'] ? '^^' . $this->getTerm($v['datatype'], 'dt') : $suffix;
     return $quot . $v['value'] . $quot . $suffix;
   }
-  
+
   function getHead() {
     $r = '';
     $nl = "\n";
@@ -126,7 +123,7 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
     }
     return $r;
   }
-  
+
   function getSerializedIndex($index, $raw = 0) {
     $r = '';
     $nl = "\n";
@@ -144,7 +141,7 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
     }
     return $r ? $this->getHead() . $nl . $nl . $r : '';
   }
-  
+
   function _serialiseResource($s, &$index, $nesting=0, $nl="\n"){
       $r='';
       if(!isset($index[$s])) return $r;
@@ -173,19 +170,19 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
                 $listText= '( ';
                 foreach ($list as $listID => $listValue) {
                     if($this->occurrencesOfIdAsObject($listID, $index) < 2 ){
-                      $listText.=$this->getTerm($listValue, 'o', null, $index).' ';  
-                    } 
+                      $listText.=$this->getTerm($listValue, 'o', null, $index).' ';
+                    }
                     else {
                         $renderAsList = false;
                     }
                 }
                 $listText.=')';
-                if($renderAsList){ 
+                if($renderAsList){
                     $r.=$listText;
                     foreach($list as $listID => $listValue) unset($index[$listID]);
                 } else {
                     $r.=$this->_serialiseResource($termID, $index, ($nesting+1));
-                } 
+                }
               } else {
                 $r.=$this->_serialiseResource($termID, $index, ($nesting+1));
               }
@@ -199,10 +196,10 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
       }
       if($s=='[') $r.=']';
       $r .= $r && ($nesting < 1) ? ' . ' : '';
-      
+
       return $r.$nl.$nl;
   }
-  
+
   /*  */
 
 }

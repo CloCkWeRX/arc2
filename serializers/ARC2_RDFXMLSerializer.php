@@ -13,10 +13,7 @@ ARC2::inc('RDFSerializer');
 
 class ARC2_RDFXMLSerializer extends ARC2_RDFSerializer {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {
     parent::__init();
     $this->content_header = 'application/rdf+xml';
@@ -26,7 +23,7 @@ class ARC2_RDFXMLSerializer extends ARC2_RDFSerializer {
   }
 
   /*  */
-  
+
   function getTerm($v, $type) {
     if (!is_array($v)) {/* uri or bnode */
       if (preg_match('/^\_\:(.*)$/', $v, $m)) {
@@ -77,7 +74,7 @@ class ARC2_RDFXMLSerializer extends ARC2_RDFSerializer {
     }
     return parent::getPName($v, $connector);
   }
-  
+
   function getHead() {
     $r = '';
     $nl = "\n";
@@ -100,14 +97,14 @@ class ARC2_RDFXMLSerializer extends ARC2_RDFSerializer {
     $r .= '>';
     return $r;
   }
-  
+
   function getFooter() {
     $r = '';
     $nl = "\n";
     $r .= $nl . $nl . '</rdf:RDF>';
     return $r;
   }
-  
+
   function getSerializedIndex($index, $raw = 0) {
     $r = '';
     $nl = "\n";
@@ -138,7 +135,7 @@ class ARC2_RDFXMLSerializer extends ARC2_RDFSerializer {
             $r .= $first_o ? '' : $nl . '    ';
             $r .= '<' . $p;
             $r .= $o;
-            $r .= preg_match('/\>/', $o) ? '</' . $p . '>' : '/>'; 
+            $r .= preg_match('/\>/', $o) ? '</' . $p . '>' : '/>';
             $first_o = 0;
           }
           $first_p = 0;

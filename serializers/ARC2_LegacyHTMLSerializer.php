@@ -12,17 +12,14 @@ ARC2::inc('Class');
 
 class ARC2_LegacyHTMLSerializer extends ARC2_Class {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {
     parent::__init();
     $this->content_header = 'text/html';
   }
 
   /*  */
-  
+
   function getSerializedArray($struct, $root = 1, $ind = ' ') {
     $n = "\n";
     $r = '';
@@ -33,7 +30,7 @@ class ARC2_LegacyHTMLSerializer extends ARC2_Class {
     }
     return $n . $ind . '<dl>' . $r . $n . $ind . '</dl>';
   }
-  
+
   /*  */
 
   function isAssociativeArray($v) {
@@ -42,7 +39,7 @@ class ARC2_LegacyHTMLSerializer extends ARC2_Class {
     }
     return 0;
   }
-  
+
   /*  */
 
   function getSerializedNode($index, $node, $level = 0, $raw = 0) {

@@ -12,17 +12,14 @@ ARC2::inc('RDFSerializer');
 
 class ARC2_POSHRDFSerializer extends ARC2_RDFSerializer {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {
     parent::__init();
     $this->content_header = 'text/html';
   }
 
   /*  */
-  
+
   function getLabel($res, $ps = '') {
     if (!$ps) $ps = array();
     foreach ($ps as $p => $os) {
@@ -33,7 +30,7 @@ class ARC2_POSHRDFSerializer extends ARC2_RDFSerializer {
     if (preg_match('/^\_\:/', $res)) return "An unnamed resource";
     return preg_replace("/^(.*[\/\#])([^\/\#]+)$/", '\\2', str_replace('_', ' ', $res));
   }
-  
+
   function getSerializedIndex($index, $res = '') {
     $r = '';
     $n = "\n";
@@ -54,7 +51,7 @@ class ARC2_POSHRDFSerializer extends ARC2_RDFSerializer {
         foreach ($os as $o) {
           $r .= $n . $this->getObjectValue($o);
         }
-        $r .= '    
+        $r .= '
           </div>
         ';
       }
@@ -66,7 +63,7 @@ class ARC2_POSHRDFSerializer extends ARC2_RDFSerializer {
     }
     return $r;
   }
-  
+
   function getObjectValue($o) {
     if ($o['type'] == 'uri') {
       if (preg_match('/(jpe?g|gif|png)$/i', $o['value'])) {
@@ -79,11 +76,11 @@ class ARC2_POSHRDFSerializer extends ARC2_RDFSerializer {
     }
     return $this->getLiteralObjectValue($o);
   }
-  
+
   function getImageObjectValue($o) {
     return '<img class="rdf-o" src="' . htmlspecialchars($o['value']) . '" alt="img" />';
   }
-  
+
   function getURIObjectValue($o) {
     $href = htmlspecialchars($o['value']);
     $label = $o['value'];

@@ -12,10 +12,7 @@ ARC2::inc('ARC2_SPARQLPlusParser');
 
 class ARC2_SPARQLScriptParser extends ARC2_SPARQLPlusParser {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {
     parent::__init();
   }
@@ -41,7 +38,7 @@ class ARC2_SPARQLScriptParser extends ARC2_SPARQLPlusParser {
       $this->addError($msg);
     }
   }
-  
+
   function getScriptBlocks() {
     return $this->v('blocks', array());
   }
@@ -49,7 +46,7 @@ class ARC2_SPARQLScriptParser extends ARC2_SPARQLPlusParser {
   /*  */
 
   function xScriptBlock($v) {
-    /* comment removal */  
+    /* comment removal */
     while (preg_match('/^\s*(\#[^\xd\xa]*)(.*)$/si', $v, $m)) $v = $m[2];
     /* BaseDecl */
     if ((list($sub_r, $v) = $this->xBaseDecl($v)) && $sub_r) {
@@ -120,9 +117,9 @@ class ARC2_SPARQLScriptParser extends ARC2_SPARQLPlusParser {
     $sub_v = $sub_r[1];
     return array(array('type' => 'block_set', 'blocks' => $blocks), $sub_v);
   }
-  
+
   /* s2 */
-  
+
   function xEndpointDecl($v) {
     if ($r = $this->x("ENDPOINT\s+", $v)) {
       if ((list($r, $sub_v) = $this->xIRI_REF($r[1])) && $r) {
@@ -138,9 +135,9 @@ class ARC2_SPARQLScriptParser extends ARC2_SPARQLPlusParser {
     }
     return array(0, $v);
   }
-  
+
   /* s3 */
-  
+
   function xAssignment($v) {
     /* Var */
     list($r, $sub_v) = $this->xVar($v);
@@ -176,7 +173,7 @@ class ARC2_SPARQLScriptParser extends ARC2_SPARQLPlusParser {
       $q = $rest ? trim(substr($sub_v, 0, -strlen($rest))) : trim($sub_v);
       return array(
         array(
-          'type' => 'assignment', 
+          'type' => 'assignment',
           'var' => $var,
           'sub_type' => 'query',
           'query' => array_merge($this->r, array(
@@ -202,9 +199,9 @@ class ARC2_SPARQLScriptParser extends ARC2_SPARQLPlusParser {
     }
     return array(0, $v);
   }
-  
+
   /* s4 'IF' BrackettedExpression '{' Script '}' ( 'ELSE' '{' Script '}')?  */
-  
+
   function xIFBlock($v) {
     if ($r = $this->x("IF\s*", $v)) {
       if ((list($sub_r, $sub_v) = $this->xBrackettedExpression($r[1])) && $sub_r) {
@@ -236,9 +233,9 @@ class ARC2_SPARQLScriptParser extends ARC2_SPARQLPlusParser {
     }
     return array(0, $v);
   }
-  
+
   /* s5 'FOR' '(' Var 'IN' Var ')' '{' Script '}' */
-  
+
   function xFORBlock($v) {
     if ($r = $this->x("FOR\s*\(\s*[\$\?]([^\s]+)\s+IN\s+[\$\?]([^\s]+)\s*\)", $v)) {/* @@todo split into sub-patterns? */
       $iterator = $r[1];
@@ -258,9 +255,9 @@ class ARC2_SPARQLScriptParser extends ARC2_SPARQLPlusParser {
     }
     return array(0, $v);
   }
-  
+
   /* s6 Var '+' Var */
-  
+
   function xVarMerge($v) {
     if ((list($sub_r, $sub_v) = $this->xVar($v)) && $sub_r) {
       $var1 = $sub_r;
@@ -276,5 +273,5 @@ class ARC2_SPARQLScriptParser extends ARC2_SPARQLPlusParser {
     }
     return array(0, $v);
   }
-  
-}  
+
+}

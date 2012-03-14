@@ -12,24 +12,21 @@ ARC2::inc('LegacyXMLParser');
 
 class ARC2_SPARQLXMLResultParser extends ARC2_LegacyXMLParser {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {/* reader */
     parent::__init();
     $this->srx = 'http://www.w3.org/2005/sparql-results#';
     $this->nsp[$this->srx] = 'srx';
     $this->allowCDataNodes = 0;
   }
-  
+
   /*  */
-  
+
   function done() {
   }
-  
+
   /*  */
-  
+
   function getVariables() {
     $r = array();
     foreach ($this->nodes as $node) {
@@ -39,7 +36,7 @@ class ARC2_SPARQLXMLResultParser extends ARC2_LegacyXMLParser {
     }
     return $r;
   }
-  
+
   function getRows() {
     $r = array();
     $index = $this->getNodeIndex();
@@ -94,7 +91,7 @@ class ARC2_SPARQLXMLResultParser extends ARC2_LegacyXMLParser {
   }
 
   /*  */
-  
+
   function getStructure() {
     $r = array('variables' => $this->getVariables(), 'rows' => $this->getRows());
     /* boolean|inserted|deleted */
@@ -108,5 +105,5 @@ class ARC2_SPARQLXMLResultParser extends ARC2_LegacyXMLParser {
 
   /*  */
 
-  
+
 }

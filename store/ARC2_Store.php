@@ -12,10 +12,7 @@ ARC2::inc('Class');
 
 class ARC2_Store extends ARC2_Class {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {/* db_con */
     parent::__init();
     $this->table_lock = 0;
@@ -27,7 +24,7 @@ class ARC2_Store extends ARC2_Class {
   }
 
   /*  */
-  
+
   function getName() {
     return $this->v('store_name', 'arc', $this->a);
   }
@@ -43,7 +40,7 @@ class ARC2_Store extends ARC2_Class {
   }
 
   /*  */
-  
+
   function createDBCon() {
     foreach (array('db_host' => 'localhost', 'db_user' => '', 'db_pwd' => '', 'db_name' => '') as $k => $v) {
       $this->a[$k] = $this->v($k, $v, $this->a);
@@ -57,7 +54,7 @@ class ARC2_Store extends ARC2_Class {
       /* try to create it */
       if ($this->a['db_name']) {
         $this->queryDB("
-          CREATE DATABASE IF NOT EXISTS " . $this->a['db_name'] . " 
+          CREATE DATABASE IF NOT EXISTS " . $this->a['db_name'] . "
           DEFAULT CHARACTER SET utf8
           DEFAULT COLLATE utf8_general_ci
           ", $db_con, 1
@@ -76,7 +73,7 @@ class ARC2_Store extends ARC2_Class {
     }
     return true;
   }
-  
+
   function getDBCon($force = 0) {
     if ($force || !isset($this->a['db_con'])) {
       if (!$this->createDBCon()) {
@@ -86,23 +83,23 @@ class ARC2_Store extends ARC2_Class {
     if (!$force && !@mysql_thread_id($this->a['db_con'])) return $this->getDBCon(1);
     return $this->a['db_con'];
   }
-  
+
   function closeDBCon() {
     if ($this->v('db_con', false, $this->a)) {
       @mysql_close($this->a['db_con']);
     }
     unset($this->a['db_con']);
   }
-  
+
   function getDBVersion() {
     if (!$this->v('db_version')) {
       $this->db_version = preg_match("/^([0-9]+)\.([0-9]+)\.([0-9]+)/", mysql_get_server_info($this->getDBCon()), $m) ? sprintf("%02d-%02d-%02d", $m[1], $m[2], $m[3])  : '00-00-00';
     }
     return $this->db_version;
   }
-  
+
   /*  */
-  
+
   function getCollation() {
     $rs = $this->queryDB('SHOW TABLE STATUS LIKE "' . $this->getTablePrefix(). 'setting"', $this->getDBCon());
     return ($rs && ($row = mysql_fetch_array($rs)) && isset($row['Collation'])) ? $row['Collation'] : '';
@@ -184,13 +181,13 @@ class ARC2_Store extends ARC2_Class {
       $this->queryDB('KILL ' . $row['Id'], $dbcon);
     }
   }
-  
+
   /*  */
 
   function getTables() {
     return array('triple', 'g2t', 'id2val', 's2val', 'o2val', 'setting');
-  }  
-  
+  }
+
   /*  */
 
   function isSetUp() {
@@ -199,7 +196,7 @@ class ARC2_Store extends ARC2_Class {
       return $this->queryDB("SELECT 1 FROM " . $tbl . " LIMIT 0", $con) ? 1 : 0;
     }
   }
-  
+
   function setUp($force = 0) {
     if (($force || !$this->isSetUp()) && ($con = $this->getDBCon())) {
       if ($this->getDBVersion() < '04-00-04') {
@@ -224,16 +221,16 @@ class ARC2_Store extends ARC2_Class {
     $mgr = new ARC2_StoreTableManager($this->a, $this);
     $mgr->splitTables();
   }
-  
+
   /*  */
-  
+
   function hasSetting($k) {
     $tbl = $this->getTablePrefix() . 'setting';
     $sql = "SELECT val FROM " . $tbl . " WHERE k = '" .md5($k). "'";
     $rs = $this->queryDB($sql, $this->getDBCon());
     return ($rs && ($row = mysql_fetch_array($rs))) ? 1 : 0;
   }
-  
+
   function getSetting($k, $default = 0) {
     $tbl = $this->getTablePrefix() . 'setting';
     $sql = "SELECT val FROM " . $tbl . " WHERE k = '" .md5($k). "'";
@@ -243,7 +240,7 @@ class ARC2_Store extends ARC2_Class {
     }
     return $default;
   }
-  
+
   function setSetting($k, $v) {
     $con = $this->getDBCon();
     $tbl = $this->getTablePrefix() . 'setting';
@@ -255,12 +252,12 @@ class ARC2_Store extends ARC2_Class {
     }
     return $this->queryDB($sql, $con);
   }
-  
+
   function removeSetting($k) {
     $tbl = $this->getTablePrefix() . 'setting';
     return $this->queryDB("DELETE FROM " . $tbl . " WHERE k = '" . md5($k) . "'", $this->getDBCon());
   }
-  
+
   function getQueueTicket() {
     if (!$this->queue_queries) return 1;
     $t = 'ticket_' . substr(md5(uniqid(rand())), 0, 10);
@@ -288,7 +285,7 @@ class ARC2_Store extends ARC2_Class {
     }
     return ($lc < 30) ? $t : 0;
   }
-  
+
   function removeQueueTicket($t) {
     if (!$this->queue_queries) return 1;
     $con = $this->getDBCon();
@@ -301,7 +298,7 @@ class ARC2_Store extends ARC2_Class {
     $this->setSetting('query_queue', $queue);
     $this->queryDB('UNLOCK TABLES', $con);
   }
-  
+
   /*  */
 
   function reset($keep_settings = 0) {
@@ -323,7 +320,7 @@ class ARC2_Store extends ARC2_Class {
       $this->queryDB('TRUNCATE ' . $prefix . $tbl, $con);
     }
   }
-  
+
   function drop() {
     $con = $this->getDBCon();
     $tbls = $this->getTables();
@@ -332,7 +329,7 @@ class ARC2_Store extends ARC2_Class {
       $this->queryDB('DROP TABLE ' . $prefix . $tbl, $con);
     }
   }
-  
+
   function insert($doc, $g, $keep_bnode_ids = 0) {
     $doc = is_array($doc) ? $this->toTurtle($doc) : $doc;
     $infos = array('query' => array('url' => $g, 'target_graph' => $g));
@@ -342,7 +339,7 @@ class ARC2_Store extends ARC2_Class {
     $this->processTriggers('insert', $infos);
     return $r;
   }
-  
+
   function delete($doc, $g) {
     if (!$doc) {
       $infos = array('query' => array('target_graphs' => array($g)));
@@ -353,23 +350,23 @@ class ARC2_Store extends ARC2_Class {
       return $r;
     }
   }
-  
+
   function replace($doc, $g, $doc_2) {
     return array($this->delete($doc, $g), $this->insert($doc_2, $g));
   }
-  
+
   function dump() {
     ARC2::inc('StoreDumper');
     $d = new ARC2_StoreDumper($this->a, $this);
     $d->dumpSPOG();
   }
-  
+
   function createBackup($path, $q = '') {
     ARC2::inc('StoreDumper');
     $d = new ARC2_StoreDumper($this->a, $this);
     $d->saveSPOG($path, $q);
   }
-  
+
   function renameTo($name) {
     $con = $this->getDBCon();
     $tbls = $this->getTables();
@@ -387,7 +384,7 @@ class ARC2_Store extends ARC2_Class {
     $this->a['store_name'] = $name;
     unset($this->tbl_prefix);
   }
-  
+
   function replicateTo($name) {
     $conf = array_merge($this->a, array('store_name' => $name));
     $new_store = ARC2::getStore($conf);
@@ -406,9 +403,9 @@ class ARC2_Store extends ARC2_Class {
     }
     return $new_store->query('SELECT COUNT(*) AS t_count WHERE { ?s ?p ?o}', 'row');
   }
-  
+
   /*  */
-  
+
   function query($q, $result_format = '', $src = '', $keep_bnode_ids = 0, $log_query = 0) {
     if ($log_query) $this->logQuery($q);
     $con = $this->getDBCon();
@@ -466,7 +463,7 @@ class ARC2_Store extends ARC2_Class {
     $trigger_r = $this->processTriggers($type, $infos);
     return $r;
   }
-  
+
   function processTriggers($type, $infos) {
     $r = array();
     $trigger_defs = $this->triggers;
@@ -491,7 +488,7 @@ class ARC2_Store extends ARC2_Class {
     $this->triggers = $trigger_defs;
     return $r;
   }
-  
+
   /*  */
 
   function getValueHash($val) {
@@ -549,7 +546,7 @@ class ARC2_Store extends ARC2_Class {
   }
 
   /*  */
-  
+
   function getLock($t_out = 10, $t_out_init = '') {
     if (!$t_out_init) $t_out_init = $t_out;
     $con = $this->getDBCon();
@@ -571,9 +568,9 @@ class ARC2_Store extends ARC2_Class {
         }
       }
     }
-    return 0;   
+    return 0;
   }
-  
+
   function releaseLock() {
     $con = $this->getDBCon();
     return $this->queryDB('DO RELEASE_LOCK("' . $this->a['db_name'] . '.' . $this->getTablePrefix() . '.write_lock")', $con);
@@ -619,9 +616,9 @@ class ARC2_Store extends ARC2_Class {
     $c = new ARC2_StoreHelper($this->a, $this);
     return $c->changeNamespaceURI($old_uri, $new_uri);
   }
-  
+
   /*  */
-  
+
   function getResourceLabel($res, $unnamed_label = 'An unnamed resource') {
     if (!isset($this->resource_labels)) $this->resource_labels = array();
     if (isset($this->resource_labels[$res])) return $this->resource_labels[$res];
@@ -647,7 +644,7 @@ class ARC2_Store extends ARC2_Class {
     $this->resource_labels[$res] = $r;
     return $r;
   }
-  
+
   function getLabelProps() {
     return array_merge(
       $this->v('rdf_label_properties' , array(), $this->a),
@@ -661,7 +658,7 @@ class ARC2_Store extends ARC2_Class {
       )
     );
   }
-  
+
   function inferLabelProps($ps) {
     $this->query('DELETE FROM <label-properties>');
     $sub_q = '';
@@ -671,7 +668,7 @@ class ARC2_Store extends ARC2_Class {
     $this->query('INSERT INTO <label-properties> { ' . $sub_q. ' }');
     $this->setSetting('store_label_properties', md5(serialize($ps)));
   }
-  
+
   /*  */
 
   function getResourcePredicates($res) {
@@ -682,7 +679,7 @@ class ARC2_Store extends ARC2_Class {
     }
     return $r;
   }
-  
+
   function getDomains($p) {
     $r = array();
     foreach($this->query('SELECT DISTINCT ?type WHERE {?s <' . $p . '> ?o ; a ?type . }', 'rows') as $row) {
@@ -697,7 +694,7 @@ class ARC2_Store extends ARC2_Class {
   }
 
   /*  */
-  
+
   function logQuery($q) {
     $fp = @fopen("arc_query_log.txt", "a");
     @fwrite($fp, date('Y-m-d\TH:i:s\Z', time()) . ' : ' . $q . '' . "\n\n");

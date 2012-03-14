@@ -13,10 +13,7 @@ ARC2::inc('RDFSerializer');
 
 class ARC2_MicroRDFSerializer extends ARC2_RDFSerializer {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {
     parent::__init();
     $this->content_header = 'text/html';
@@ -24,7 +21,7 @@ class ARC2_MicroRDFSerializer extends ARC2_RDFSerializer {
   }
 
   /*  */
-  
+
   function getLabel($res, $ps = '') {
     if (!$ps) $ps = array();
     foreach ($ps as $p => $os) {
@@ -36,7 +33,7 @@ class ARC2_MicroRDFSerializer extends ARC2_RDFSerializer {
     return $this->extractTermLabel($res);
     return preg_replace("/^(.*[\/\#])([^\/\#]+)$/", '\\2', str_replace('_', ' ', $res));
   }
-  
+
   function getSerializedIndex($index, $res = '') {
     $r = '';
     $n = "\n";
@@ -81,7 +78,7 @@ class ARC2_MicroRDFSerializer extends ARC2_RDFSerializer {
     }
     return $r;
   }
-  
+
   function getObjectValue($o, $p) {
     if ($o['type'] == 'uri') {
       if (preg_match('/(jpe?g|gif|png)$/i', $o['value'])) {
@@ -94,11 +91,11 @@ class ARC2_MicroRDFSerializer extends ARC2_RDFSerializer {
     }
     return $this->getLiteralObjectValue($o, $p);
   }
-  
+
   function getImageObjectValue($o, $p) {
     return '<img class="rdf-value" itemprop="' . $p. '" src="' . htmlspecialchars($o['value']) . '" alt="img" />';
   }
-  
+
   function getURIObjectValue($o, $p) {
     $id = htmlspecialchars($o['value']);
     $label = $this->getObjectLabel($o['value']);
@@ -137,6 +134,6 @@ class ARC2_MicroRDFSerializer extends ARC2_RDFSerializer {
   }
 
   /*  */
-  
+
 }
 

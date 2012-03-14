@@ -12,17 +12,14 @@ ARC2::inc('Class');
 
 class ARC2_LegacyXMLSerializer extends ARC2_Class {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {
     parent::__init();
     $this->content_header = 'text/xml';
   }
 
   /*  */
-  
+
   function getSerializedArray($struct, $root = 1, $ind = '  ') {
     $n = "\n";
     $r = '';
@@ -35,7 +32,7 @@ class ARC2_LegacyXMLSerializer extends ARC2_Class {
     if ($root) $r = $this->getHead() . $r . $this->getFooter();
     return $r;
   }
-  
+
   /*  */
 
   function getHead() {
@@ -44,13 +41,13 @@ class ARC2_LegacyXMLSerializer extends ARC2_Class {
     $r .= $n . '<items>';
     return $r;
   }
-  
+
   function getFooter() {
     $n = "\n";
     $r = $n . '</items>';
     return $r;
   }
-  
+
   /*  */
 
   function isAssociativeArray($v) {
@@ -59,7 +56,7 @@ class ARC2_LegacyXMLSerializer extends ARC2_Class {
     }
     return 0;
   }
-  
+
   /*  */
 
 }

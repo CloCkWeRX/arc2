@@ -12,10 +12,7 @@ ARC2::inc('LegacyXMLParser');
 
 class ARC2_RSSParser extends ARC2_LegacyXMLParser {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {/* reader */
     parent::__init();
     $this->triples = array();
@@ -28,24 +25,24 @@ class ARC2_RSSParser extends ARC2_LegacyXMLParser {
     $this->cache = array();
     $this->allowCDataNodes = 0;
   }
-  
+
   /*  */
-  
+
   function done() {
     $this->extractRDF();
   }
-  
+
   /*  */
-  
+
   function setReader(&$reader) {
     $this->reader = $reader;
   }
-  
+
   function createBnodeID(){
     $this->bnode_id++;
     return '_:' . $this->bnode_prefix . $this->bnode_id;
   }
-  
+
   function addT($t) {
     //if (!isset($t['o_datatype']))
     if ($this->skip_dupes) {
@@ -69,7 +66,7 @@ class ARC2_RSSParser extends ARC2_LegacyXMLParser {
   function countTriples() {
     return $this->t_count;
   }
-  
+
   function getSimpleIndex($flatten_objects = 1, $vals = '') {
     return ARC2::getSimpleIndex($this->getTriples(), $flatten_objects, $vals);
   }
@@ -122,20 +119,20 @@ class ARC2_RSSParser extends ARC2_LegacyXMLParser {
       }
     }
   }
-  
+
   function extractChannel($els) {
     $res = array($this->rdf . 'type' => array(array('value' => $this->rss . 'channel', 'type' => 'uri')));
     $res = array_merge($res, $this->extractProps($els, 'channel'));
     return array($res[$this->rss . 'link'][0]['value'] => $res);
   }
-  
+
   function extractItem($els) {
     $res = array($this->rdf . 'type' => array(array('value' => $this->rss . 'item', 'type' => 'uri')));
     $res = array_merge($res, $this->extractProps($els, 'item'));
     if (isset($res[$this->rss . 'link'])) return array($res[$this->rss . 'link'][0]['value'] => $res);
     if (isset($res[$this->dc . 'identifier'])) return array($res[$this->dc . 'identifier'][0]['value'] => $res);
   }
-  
+
   function extractProps($els, $container) {
     $res = array();
     foreach ($els as $info) {
@@ -178,8 +175,8 @@ class ARC2_RSSParser extends ARC2_LegacyXMLParser {
     }
     return $res;
   }
-  
+
   /*  */
 
-  
+
 }

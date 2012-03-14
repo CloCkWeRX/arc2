@@ -12,10 +12,7 @@ ARC2::inc('Class');
 
 class ARC2_RDFExtractor extends ARC2_Class {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {
     parent::__init();
     $this->nodes = $this->caller->getNodes();
@@ -27,7 +24,7 @@ class ARC2_RDFExtractor extends ARC2_Class {
   }
 
   /*  */
-  
+
   function x($re, $v, $options = 'si') {
     return ARC2::x($re, $v, $options);
   }
@@ -38,34 +35,34 @@ class ARC2_RDFExtractor extends ARC2_Class {
   }
 
   /*  */
-  
+
   function extractRDF() {
   }
 
   /*  */
-  
+
   function addTs($ts) {
     foreach ($ts as $t) {
       $this->caller->addT($t);
     }
   }
-  
+
   function addT($t) {
     return $this->caller->addT($t);
   }
-  
+
   /*  */
-  
+
   function getSubNodes($n) {
     return $this->v($n['id'], array(), $this->index);
   }
-  
+
   function getParentNode($n) {
     return isset($this->nodes[$n['p_id']]) ? $this->nodes[$n['p_id']] : 0;
   }
 
   /*  */
-  
+
   function getSubNodesByClass($n, $cls, $skip_self = 0) {
     if (!$skip_self && $this->hasClass($n, $cls)) {
       return array($n);
@@ -79,7 +76,7 @@ class ARC2_RDFExtractor extends ARC2_Class {
     }
     return $r;
   }
-  
+
   function getSubNodeByClass($n, $cls, $skip_self = 0) {
     if (!$skip_self && $this->hasClass($n, $cls)) {
       return $n;
@@ -92,7 +89,7 @@ class ARC2_RDFExtractor extends ARC2_Class {
     }
     return 0;
   }
-  
+
   function getParentNodeByClass($n, $cls, $skip_self = 0) {
     if (!$skip_self && $this->hasClass($n, $cls)) {
       return $n;
@@ -104,15 +101,15 @@ class ARC2_RDFExtractor extends ARC2_Class {
     }
     return 0;
   }
-  
+
   /*  */
-  
+
   function hasAttribute($a, $n, $v) {
     $vs = is_array($v) ? $v : array($v);
     $a_vs = $this->v($a . ' m', array(), $n['a']);
     return array_intersect($vs, $a_vs) ? 1 : 0;
   }
-  
+
   function hasClass($n, $v) {
     return $this->hasAttribute('class', $n, $v);
   }
@@ -138,9 +135,9 @@ class ARC2_RDFExtractor extends ARC2_Class {
     }
     return $r;
   }
-  
+
   /*  */
-  
+
   function getPlainContent($n, $trim = 1, $use_img_alt = 1) {
     if ($n['tag'] == 'comment') {
       $r = '';
@@ -169,7 +166,7 @@ class ARC2_RDFExtractor extends ARC2_Class {
     $r = preg_replace('/\s\s*/s', ' ', $r);
     return $trim ? trim($r) : $r;
   }
-  
+
   function getContent($n, $outer = 0, $trim = 1) {
     //echo '<pre>' . htmlspecialchars(print_r($n, 1)) . '</pre>';
     if ($n['tag'] == 'comment') {
@@ -205,9 +202,9 @@ class ARC2_RDFExtractor extends ARC2_Class {
     }
     return ($trim && !$this->keep_cdata_ws) ? trim($r) : $r;
   }
-  
+
   /*  */
-  
+
   function getDocID($n) {
     $id = $n['id'];
     $k = 'doc_' . $id;
@@ -220,7 +217,7 @@ class ARC2_RDFExtractor extends ARC2_Class {
   function getDocOwnerID($n) {
     return '_:owner_of_' . $this->normalize($this->getDocID($n));
   }
-  
+
   /*  */
 
   function normalize($v) {
@@ -233,5 +230,5 @@ class ARC2_RDFExtractor extends ARC2_Class {
   }
 
   /*  */
-  
+
 }

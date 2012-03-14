@@ -13,10 +13,7 @@ ARC2::inc('Class');
 
 class ARC2_StoreDumper extends ARC2_Class {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {
     parent::__init();
     $this->store = $this->caller;
@@ -25,7 +22,7 @@ class ARC2_StoreDumper extends ARC2_Class {
   }
 
   /*  */
-  
+
   function dumpSPOG() {
     header('Content-Type: application/sparql-results+xml');
     if ($this->v('store_use_dump_dir', 0, $this->a)) {
@@ -88,14 +85,14 @@ class ARC2_StoreDumper extends ARC2_Class {
     fwrite($fp, $this->getFooter());
     @fclose($fp);
   }
-  
+
   /*  */
 
   function getRecordset($offset) {
     $prefix = $this->store->getTablePrefix();
     $con = $this->store->getDBCon();
     $sql = '
-      SELECT 
+      SELECT
         VS.val AS s,
         T.s_type AS `s type`,
         VP.val AS p,
@@ -124,11 +121,11 @@ class ARC2_StoreDumper extends ARC2_Class {
   }
 
   /*  */
-  
+
   function getHeader() {
     $n = "\n";
     return '' .
-      '<?xml version="1.0"?>' . 
+      '<?xml version="1.0"?>' .
       $n . '<sparql xmlns="http://www.w3.org/2005/sparql-results#">' .
       $n . '  <head>' .
       $n . '    <variable name="s"/>' .
@@ -212,7 +209,7 @@ class ARC2_StoreDumper extends ARC2_Class {
     $n = "\n";
     return '' .
       $n . '  </results>' .
-      $n . '</sparql>' . 
+      $n . '</sparql>' .
       $n .
     '';
   }

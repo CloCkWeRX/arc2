@@ -12,10 +12,7 @@ ARC2::inc('ARC2_PoshRdfExtractor');
 
 class ARC2_MicroformatsExtractor extends ARC2_PoshRdfExtractor {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {
     parent::__init();
     $this->terms = $this->getTerms();
@@ -25,7 +22,7 @@ class ARC2_MicroformatsExtractor extends ARC2_PoshRdfExtractor {
   }
 
   /*  */
-  
+
   function preProcessNode($n) {
     if (!$n) return $n;
     /* remove existing poshRDF hooks */
@@ -49,12 +46,12 @@ class ARC2_MicroformatsExtractor extends ARC2_PoshRdfExtractor {
     $n['a']['rel m'] = preg_split('/ /', $n['a']['rel']);
     return $n;
   }
-  
+
   function getPredicates($n, $ns) {
     $ns = array('mf' => $ns['mf']);
     return parent::getPredicates($n, $ns);
   }
-  
+
   function tweakObject($o, $p, $ct) {
     $ns = $ct['ns']['mf'];
     /* rel-tag, skill => extract from URL */
@@ -64,9 +61,9 @@ class ARC2_MicroformatsExtractor extends ARC2_PoshRdfExtractor {
     }
     return $o;
   }
-  
+
   /*  */
-  
+
   function getTerms() {
     /* no need to define 'p' if scope is not empty */
     return array(
@@ -174,5 +171,5 @@ class ARC2_MicroformatsExtractor extends ARC2_PoshRdfExtractor {
   }
 
   /*  */
-  
+
 }

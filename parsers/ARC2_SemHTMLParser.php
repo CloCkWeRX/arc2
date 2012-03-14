@@ -12,10 +12,7 @@ ARC2::inc('LegacyXMLParser');
 
 class ARC2_SemHTMLParser extends ARC2_LegacyXMLParser {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {/* reader */
     parent::__init();
     $this->default_sem_html_formats = 'dc openid erdf rdfa posh-rdf microformats';
@@ -32,7 +29,7 @@ class ARC2_SemHTMLParser extends ARC2_LegacyXMLParser {
     $this->detected_formats = array();
     $this->keep_cdata_ws = $this->v('keep_cdata_whitespace', 0, $this->a);
   }
-  
+
   /*  */
 
   function x($re, $v, $options = 'si', $keep_ws = 0) {
@@ -49,12 +46,12 @@ class ARC2_SemHTMLParser extends ARC2_LegacyXMLParser {
   function setReader(&$reader) {
     $this->reader = $reader;
   }
-  
+
   function createBnodeID(){
     $this->bnode_id++;
     return '_:' . $this->bnode_prefix . $this->bnode_id;
   }
-  
+
   function addT($t) {
     if (function_exists('html_entity_decode')) {
       $t['o'] = html_entity_decode($t['o']);
@@ -80,7 +77,7 @@ class ARC2_SemHTMLParser extends ARC2_LegacyXMLParser {
   function countTriples() {
     return $this->t_count;
   }
-  
+
   function getSimpleIndex($flatten_objects = 1, $vals = '') {
     return ARC2::getSimpleIndex($this->getTriples(), $flatten_objects, $vals);
   }
@@ -112,7 +109,7 @@ class ARC2_SemHTMLParser extends ARC2_LegacyXMLParser {
     unset($this->reader);
     return $this->done();
   }
-  
+
   /*  */
 
   function getEncoding($src = 'ignore') {
@@ -120,13 +117,13 @@ class ARC2_SemHTMLParser extends ARC2_LegacyXMLParser {
   }
 
   /*  */
-  
+
   function done() {
     if ($this->auto_extract) {
       $this->extractRDF();
     }
   }
-  
+
   /*  */
 
   function processData($v) {
@@ -202,7 +199,7 @@ class ARC2_SemHTMLParser extends ARC2_LegacyXMLParser {
     }
     return array(0, $v);
   }
-  
+
   function xDoctype($v) {
     if ($r = $this->x('\<\!DOCTYPE', $v)) {
       if ($sub_r = $this->x('([^\>]+)\>', $r[1])) {
@@ -211,14 +208,14 @@ class ARC2_SemHTMLParser extends ARC2_LegacyXMLParser {
     }
     return array(0, $v);
   }
-  
+
   function xWS($v) {
     if ($r = ARC2::x('(\s+)', $v)) {
       return array($r[1], $r[2]);
     }
     return array(0, $v);
   }
-  
+
   /*  */
 
   function xOpen($v) {
@@ -228,7 +225,7 @@ class ARC2_SemHTMLParser extends ARC2_LegacyXMLParser {
     }
     return array(0, $v);
   }
-  
+
   /*  */
 
   function xAttributes($v) {
@@ -275,7 +272,7 @@ class ARC2_SemHTMLParser extends ARC2_LegacyXMLParser {
     }
     return array(0, $v);
   }
-  
+
   /*  */
 
   function isEmpty($t, $v) {
@@ -287,9 +284,9 @@ class ARC2_SemHTMLParser extends ARC2_LegacyXMLParser {
     }
     return 0;
   }
-  
+
   /*  */
-  
+
   function xClose($v) {
     if ($r = $this->x('\<\/([^\s\>]+)\>', $v)) {
       return array(array('tag' => strtolower($r[1])), $r[2]);
@@ -298,7 +295,7 @@ class ARC2_SemHTMLParser extends ARC2_LegacyXMLParser {
   }
 
   /*  */
-  
+
   function xCData($v) {
     if (preg_match('/(script|style)/i', $this->cur_tag)) {
       if ($r = $this->x('(.+)(\<\/' . $this->cur_tag . '\>)', $v, 'Uis')) {
@@ -329,11 +326,11 @@ class ARC2_SemHTMLParser extends ARC2_LegacyXMLParser {
       }
     }
   }
-  
+
   function getNode($id) {
     return isset($this->nodes[$id]) ? $this->nodes[$id] : 0;
   }
-  
+
   /*  */
-  
+
 }

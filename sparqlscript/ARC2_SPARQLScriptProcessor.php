@@ -12,10 +12,7 @@ ARC2::inc('Class');
 
 class ARC2_SPARQLScriptProcessor extends ARC2_Class {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {
     parent::__init();
     $this->max_operations = $this->v('sparqlscript_max_operations', 0, $this->a);
@@ -31,13 +28,13 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
       'query_log' => array()
     );
   }
-  
+
   function reset() {
     $this->__init();
   }
 
   /*  */
-  
+
   function processScript($s) {
     $this->script_hash = abs(crc32($s));
     $parser = $this->getParser();
@@ -61,12 +58,12 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
   }
 
   /*  */
-  
+
   function getParser() {
     ARC2::inc('SPARQLScriptParser');
     return new ARC2_SPARQLScriptParser($this->a, $this);
   }
-  
+
   /*  */
 
   function setVar($name, $val, $type = 'literal', $meta = '') {
@@ -109,7 +106,7 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
     } while (($old_val != $val) && ($loop < 10));
     return $val;
   }
-  
+
   function getPlaceholderValue($ph) {
     /* simple vars */
     if (isset($this->env['vars'][$ph])) {
@@ -155,7 +152,7 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
     }
     return '';
   }
-  
+
   function getPropertyValue($obj, $path) {
     $val = isset($obj['value']) ? $obj['value'] : $obj;
     $path = $this->replacePlaceholders($path, 'property_value', 0);
@@ -225,7 +222,7 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
     /* try RDF */
     return $this->getArraySerialization($val);
   }
-  
+
   function renderObjects($os) {
     $r = '';
     foreach ($os as $o) {
@@ -236,7 +233,7 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
   }
 
   /*  */
-  
+
   function getArraySerialization($v, $context) {
     $v_type = ARC2::getStructType($v);/* string|array|triples|index */
     $pf = ARC2::getPreferredFormat();
@@ -270,7 +267,7 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
   }
 
   /*  */
-  
+
   function processEndpointDeclBlock($block) {
     $this->env['endpoint'] = $block['endpoint'];
     return $this->env;
@@ -303,7 +300,7 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
       return $this->addError("no store (" . $ep_uri . ")");
     }
   }
-  
+
   function getStore($ep_uri) {
     /* local store */
     if ((!$ep_uri || $ep_uri == ARC2::getScriptURI()) && ($this->v('sparqlscript_default_endpoint', '', $this->a) == 'local')) {
@@ -338,12 +335,12 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
     );
     $this->env['vars'][$block['var']['value']] = $r;
   }
-  
+
   function processStringAssignmentBlock($block) {
     $r = array('value_type' => 'literal', 'value' => $this->replacePlaceholders($block['string']['value']));
     $this->env['vars'][$block['var']['value']] = $r;
   }
-  
+
   function processVarAssignmentBlock($block) {
     if (isset($this->env['vars'][$block['var2']['value']])) {
       $this->env['vars'][$block['var']['value']] = $this->env['vars'][$block['var2']['value']];
@@ -352,12 +349,12 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
       $this->env['vars'][$block['var']['value']] = array('value_type' => 'undefined', 'value' => '');
     }
   }
-  
+
   function processPlaceholderAssignmentBlock($block) {
     $ph_val = $this->getPlaceholderValue($block['placeholder']['value']);
     $this->env['vars'][$block['var']['value']] = array('value_type' => 'undefined', 'value' => $ph_val);
   }
-  
+
   function processVarMergeAssignmentBlock($block) {
     $val1 = isset($this->env['vars'][$block['var2']['value']]) ? $this->env['vars'][$block['var2']['value']] : array('value_type' => 'undefined', 'value' => '');
     $val2 = isset($this->env['vars'][$block['var3']['value']]) ? $this->env['vars'][$block['var3']['value']] : array('value_type' => 'undefined', 'value' => '');
@@ -368,7 +365,7 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
       $this->env['vars'][$block['var']['value']] = $val1 + $val2;
     }
   }
-  
+
   function processFunctionCallAssignmentBlock($block) {
     $sub_r = $this->processFunctionCallBlock($block['function_call']);
     if ($this->getErrors()) return 0;
@@ -387,7 +384,7 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
   }
 
   /*  */
-  
+
   function processIfblockBlock($block) {
     if ($this->testCondition($block['condition'])) {
       $blocks = $block['blocks'];
@@ -400,7 +397,7 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
       if ($this->getErrors()) return 0;
     }
   }
-  
+
   function testCondition($cond) {
     $m = 'test' . $this->camelCase($cond['type']) . 'Condition';
     if (!method_exists($this, $m)) return $this->addError('Unknown method "' . $m . '"');
@@ -415,7 +412,7 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
     if ($op == '!') $r = !$r;
     return $r ? true : false;
   }
-  
+
   function testPlaceholderCondition($cond) {
     $val = $this->getPlaceholderValue($cond['value']);
     $r = $val ? true : false;
@@ -423,13 +420,13 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
     if ($op == '!') $r = !$r;
     return $r;
   }
-  
+
   function testExpressionCondition($cond) {
     $m = 'test' . $this->camelCase($cond['sub_type']) . 'ExpressionCondition';
     if (!method_exists($this, $m)) return $this->addError('Unknown method "' . $m . '"');
     return $this->$m($cond);
   }
-  
+
   function testRelationalExpressionCondition($cond) {
     $op = $cond['operator'];
     if ($op == '=') $op = '==';
@@ -455,13 +452,13 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
   function getLiteralPatternValue($pattern) {
     return $pattern['value'];
   }
-  
+
   function getPlaceholderPatternValue($pattern) {
     return $this->getPlaceholderValue($pattern['value']);
   }
-  
+
   /*  */
-  
+
   function processForblockBlock($block) {
     $set = $this->v($block['set'], array('value' => array()), $this->env['vars']);
     $entries = isset($set['value']) ? $set['value'] : $set;
@@ -485,7 +482,7 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
       }
     }
   }
-  
+
   /*  */
 
   function processLiteralBlock($block) {
@@ -493,7 +490,7 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
   }
 
   /*  */
-  
+
   function processFunctionCallBlock($block) {
     $uri = $this->replacePlaceholders($block['uri'], 'function_call');
     /* built-ins */
@@ -524,7 +521,7 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
     //echo "\n" . $script . $arg['type'];
     $this->processScript($script);
   }
-  
+
   function processHTTPCall($block, $mthd = 'GET') {
     ARC2::inc('Reader');
     $reader = new ARC2_Reader($this->a, $this);
@@ -544,9 +541,9 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
     unset($this->reader);
     return array('value_type' => 'http_response', 'value' => $resp);
   }
-  
+
   /*  */
-  
+
   function extractVars($pattern, $input = '') {
     $vars = array();
     /* replace PHs, track ()s */
@@ -586,7 +583,7 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
     /* no placeholders */
     return ($pattern == $input) ? 1 : 0;
   }
-  
+
   /*  */
-  
+
 }

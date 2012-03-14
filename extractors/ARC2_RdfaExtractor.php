@@ -12,16 +12,13 @@ ARC2::inc('RDFExtractor');
 
 class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {
     parent::__init();
   }
 
   /*  */
-  
+
   function extractRDF() {
     //echo '<pre>' . htmlspecialchars(print_r($this->nodes, 1)) . '</pre>';
     if (!isset($this->caller->detected_formats['rdfa'])) return 0;
@@ -38,9 +35,9 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
     );
     $this->processNode($root_node, $context, 0);
   }
-  
+
   /*  */
-  
+
   function getRootNode() {
     foreach ($this->nodes as $id => $node) {
       if ($node['tag'] == 'html') {
@@ -49,7 +46,7 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
     }
     return $this->nodes[0];
   }
-  
+
   /*  */
 
   function processNode($n, $ct, $level) {
@@ -126,7 +123,7 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
           $this->addT(array(
             's' => $lct['new_s'],
             's_type' => preg_match('/^\_\:/', $lct['new_s']) ? 'bnode' : 'uri',
-            'p' => 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', 
+            'p' => 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
             'o' => $uri,
             'o_type' => 'uri',
             'o_lang' => '',
@@ -142,7 +139,7 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
             $this->addT(array(
               's' => $lct['new_s'],
               's_type' => preg_match('/^\_\:/', $lct['new_s']) ? 'bnode' : 'uri',
-              'p' => $uri, 
+              'p' => $uri,
               'o' => $lct['cur_o_res'],
               'o_type' => preg_match('/^\_\:/', $lct['cur_o_res']) ? 'bnode' : 'uri',
               'o_lang' => '',
@@ -156,7 +153,7 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
             $this->addT(array(
               's' => $lct['cur_o_res'],
               's_type' => preg_match('/^\_\:/', $lct['cur_o_res']) ? 'bnode' : 'uri',
-              'p' => $uri, 
+              'p' => $uri,
               'o' => $lct['new_s'],
               'o_type' => preg_match('/^\_\:/', $lct['new_s']) ? 'bnode' : 'uri',
               'o_lang' => '',
@@ -188,7 +185,7 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
           $this->addT(array(
             's' => $lct['new_s'],
             's_type' => preg_match('/^\_\:/', $lct['new_s']) ? 'bnode' : 'uri',
-            'p' => $uri, 
+            'p' => $uri,
             'o' => $lct['cur_o_lit']['value'],
             'o_type' => 'literal',
             'o_lang' => $lct['cur_o_lit']['lang'],
@@ -244,7 +241,7 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
           $this->addT(array(
             's' => $lct['new_s'],
             's_type' => preg_match('/^\_\:/', $lct['new_s']) ? 'bnode' : 'uri',
-            'p' => $inco_t['p'], 
+            'p' => $inco_t['p'],
             'o' => $ct['p_s'],
             'o_type' => preg_match('/^\_\:/', $ct['p_s']) ? 'bnode' : 'uri',
             'o_lang' => '',
@@ -259,7 +256,7 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
     if ($complete_triples) return 1;
     return 0;
   }
-  
+
   /*  */
 
   function getAttributeURIs($n, $ct, $lct, $attr) {
@@ -273,7 +270,7 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
     }
     return $r;
   }
-  
+
   /*  */
 
   function getCurrentObjectLiteral($n, $lct, $ct) {
@@ -307,7 +304,7 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
     }
     return $r;
   }
-  
+
   function injectXMLDeclarations($val, $ns, $lang) {//@@todo proper node rebuilding */
     $lang_code = $lang ? ' xml:lang="' . $lang . '"' : '';
     /* ns */
@@ -322,9 +319,9 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
     $val = preg_replace('/(\<[^\>]*)( xmlns=[^\s\>]+)([^\>]*)(xmlns=[^\s\>]+)/s', '\\1\\3\\4', $val);
     return $val;
   }
-  
+
   /*  */
-  
+
   function xURI($v, $base, $ns, $attr_type = '', $lct = '') {
     if ((list($sub_r, $sub_v) = $this->xBlankCURIE($v, $base, $ns)) && $sub_r) {
       return array($sub_r, $sub_v);
@@ -343,7 +340,7 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
     }
     return array($this->calcURI($v, $base), '');
   }
-  
+
   function xBlankCURIE($v, $base, $ns) {
     if ($sub_r = $this->x('\[\_\:\]', $v)) {
       $this->empty_bnode = isset($this->empty_bnode) ? $this->empty_bnode : $this->createBnodeID();
@@ -354,7 +351,7 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
     }
     return array(0, $v);
   }
-  
+
   function xSafeCURIE($v, $base, $ns, $lct = '') {
     /* empty */
     if ($sub_r = $this->x('\[\]', $v)) {
@@ -369,7 +366,7 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
     }
     return array(0, $v);
   }
-  
+
   function xCURIE($v, $base, $ns) {
     if ($sub_r = $this->x('([a-z0-9\-\_]*)\:([^\s]+)', $v)) {
       if (!$sub_r[1]) return array('http://www.w3.org/1999/xhtml/vocab#' . $sub_r[2], '');
@@ -379,7 +376,7 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
     }
     return array(0, $v);
   }
-  
+
   /*  */
 
 }

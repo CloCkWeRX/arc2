@@ -12,10 +12,7 @@ ARC2::inc('ARC2_RDFExtractor');
 
 class ARC2_PoshRdfExtractor extends ARC2_RDFExtractor {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {
     parent::__init();
     $this->terms = $this->v('posh_terms', array(), $this->a);
@@ -45,7 +42,7 @@ class ARC2_PoshRdfExtractor extends ARC2_RDFExtractor {
   }
 
   /*  */
-  
+
   function extractRDF() {
     if (!isset($this->caller->detected_formats['posh-rdf'])) return 0;
     $n = $this->getRootNode();
@@ -63,7 +60,7 @@ class ARC2_PoshRdfExtractor extends ARC2_RDFExtractor {
     );
     $ct = $this->processNode($n, $context, 0, 1);
   }
-  
+
   /*  */
 
   function getRootNode() {
@@ -74,7 +71,7 @@ class ARC2_PoshRdfExtractor extends ARC2_RDFExtractor {
     }
     return $this->nodes[0];
   }
-  
+
   /*  */
 
   function processNode($n, $ct, $level, $pos) {
@@ -127,9 +124,9 @@ class ARC2_PoshRdfExtractor extends ARC2_RDFExtractor {
     }
     return $lct;
   }
-  
+
   /*  */
-  
+
   function getSubject($n, $ct) {
     foreach (array('href uri', 'src uri', 'title', 'value') as $k) {
       if (isset($n['a'][$k])) return $n['a'][$k];
@@ -137,7 +134,7 @@ class ARC2_PoshRdfExtractor extends ARC2_RDFExtractor {
     /* rpointer */
     return $ct['base'] . '#resource(' . $ct['rpointer'] . ')';
   }
-  
+
   function getPredicates($n, $ns) {
     $r = array();
     /* try pnames */
@@ -185,7 +182,7 @@ class ARC2_PoshRdfExtractor extends ARC2_RDFExtractor {
       $this->addT(array(
         's' => $this->getContainerSubject($ct, $p_key),
         's_type' => preg_match('/^\_\:/', $s) ? 'bnode' : 'uri',
-        'p' => $p, 
+        'p' => $p,
         'o' => $o,
         'o_type' => $this->getObjectType($o, $p_key),
         'o_lang' => $lang,
@@ -203,7 +200,7 @@ class ARC2_PoshRdfExtractor extends ARC2_RDFExtractor {
       $this->addT(array(
         's' => $s,
         's_type' => preg_match('/^\_\:/', $s) ? 'bnode' : 'uri',
-        'p' => $ct['ns']['rdf'] . 'type', 
+        'p' => $ct['ns']['rdf'] . 'type',
         'o' => $posh_ns . ucfirst($p_key),
         'o_type' => 'uri',
         'o_lang' => '',
@@ -211,13 +208,13 @@ class ARC2_PoshRdfExtractor extends ARC2_RDFExtractor {
       ));
     }
   }
-  
+
   /*  */
-  
+
   function preProcessNode($n) {
     return $n;
   }
-  
+
   function getContainerSubject($ct, $term) {
     if (!isset($this->terms[$term])) return $ct['s'][0][1];
     $scope = $this->v('scope', array(), $this->terms[$term]);
@@ -228,27 +225,27 @@ class ARC2_PoshRdfExtractor extends ARC2_RDFExtractor {
     }
     return 0;
   }
-  
+
   function isSubject($term) {
     if (!isset($this->terms[$term])) return 0;
     return in_array('s', $this->terms[$term]);
   }
-  
+
   function isDatatypeProperty($term) {
     if (!isset($this->terms[$term])) return 0;
     return in_array('plain', $this->terms[$term]);
   }
-  
+
   function getObjectType($o, $term) {
     if ($this->isDatatypeProperty($term)) return 'literal';
     if (strpos($o, ' ')) return 'literal';
     return preg_match('/^([a-z0-9\_]+)\:[^\s]+$/s', $o, $m) ? ($m[1] == '_' ? 'bnode' : 'uri') : 'literal';
   }
-  
+
   function tweakObject($o, $p, $ct) {
     return $o;
   }
-  
+
   /*  */
 
 }

@@ -13,10 +13,7 @@ ARC2::inc('Class');
 
 class ARC2_RDFSerializer extends ARC2_Class {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {
     parent::__init();
     foreach ($this->ns as $k => $v) {
@@ -25,7 +22,7 @@ class ARC2_RDFSerializer extends ARC2_Class {
   }
 
   /*  */
-  
+
   function xgetPName($v) {/* moved to merged getPName in ARC2_CLass */
     if (preg_match('/^([a-z0-9\_\-]+)\:([a-z\_][a-z0-9\_\-]*)$/i', $v, $m) && isset($this->ns[$m[1]])) {
       $this->used_ns = !in_array($this->ns[$m[1]], $this->used_ns) ? array_merge($this->used_ns, array($this->ns[$m[1]])) : $this->used_ns;
@@ -36,18 +33,18 @@ class ARC2_RDFSerializer extends ARC2_Class {
     }
     return 0;
   }
-  
+
   /*  */
-  
+
   function getSerializedTriples($triples, $raw = 0) {
     $index = ARC2::getSimpleIndex($triples, 0);
     return $this->getSerializedIndex($index, $raw);
   }
-  
+
   function getSerializedIndex($index, $raw = 0) {
     return '';
   }
-  
+
   /*  */
-  
+
 }

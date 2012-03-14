@@ -12,17 +12,14 @@ ARC2::inc('RDFSerializer');
 
 class ARC2_RDFJSONSerializer extends ARC2_RDFSerializer {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {
     parent::__init();
     $this->content_header = 'application/json';
   }
 
   /*  */
-  
+
   function getTerm($v, $term = 's') {
     if (!is_array($v)) {
       if (preg_match('/^\_\:/', $v)) {
@@ -58,7 +55,7 @@ class ARC2_RDFJSONSerializer extends ARC2_RDFSerializer {
     $to = array('\\\\', '\r', '\t', '\n', '\"', '\b', '\f', '\/');
     return str_replace($from, $to, $v);
   }
-    
+
   function getSerializedIndex($index, $raw = 0) {
     $r = '';
     $nl = "\n";
@@ -86,7 +83,7 @@ class ARC2_RDFJSONSerializer extends ARC2_RDFSerializer {
     $r .= $r ? ' ' : '';
     return '{' . $nl . $r . $nl . '}';
   }
-  
+
   /*  */
 
 }

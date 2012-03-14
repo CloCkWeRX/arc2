@@ -12,22 +12,19 @@ ARC2::inc('JSONParser');
 
 class ARC2_SGAJSONParser extends ARC2_JSONParser {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {/* reader */
     parent::__init();
     $this->rdf = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
     $this->nsp = array($this->rdf => 'rdf');
   }
-  
+
   /*  */
 
   function done() {
     $this->extractRDF();
   }
-  
+
   function extractRDF() {
     $s = $this->getContext();
     $os = $this->getURLs($this->struct);
@@ -35,12 +32,12 @@ class ARC2_SGAJSONParser extends ARC2_JSONParser {
       if ($o != $s) $this->addT($s, 'http://www.w3.org/2000/01/rdf-schema#seeAlso', $o, 'uri', 'uri');
     }
   }
-  
+
   function getContext() {
     if (!isset($this->struct['canonical_mapping'])) return '';
     foreach ($this->struct['canonical_mapping'] as $k => $v) return $v;
   }
-  
+
   function getURLs($struct) {
     $r =array();
     if (is_array($struct)) {
@@ -57,7 +54,7 @@ class ARC2_SGAJSONParser extends ARC2_JSONParser {
     }
     return $r;
   }
-  
+
   /*  */
 
 }

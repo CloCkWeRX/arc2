@@ -12,10 +12,7 @@ ARC2::inc('RDFExtractor');
 
 class ARC2_TwitterProfilePicExtractor extends ARC2_RDFExtractor {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {
     parent::__init();
     $this->a['ns']['foaf'] = 'http://xmlns.com/foaf/0.1/';
@@ -23,7 +20,7 @@ class ARC2_TwitterProfilePicExtractor extends ARC2_RDFExtractor {
   }
 
   /*  */
-  
+
   function extractRDF() {
     $t_vals = array();
     $t = '';
@@ -41,5 +38,5 @@ class ARC2_TwitterProfilePicExtractor extends ARC2_RDFExtractor {
   }
 
   /*  */
-  
+
 }

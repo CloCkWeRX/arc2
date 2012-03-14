@@ -13,10 +13,7 @@ ARC2::inc('RDFParser');
 
 class ARC2_SPOGParser extends ARC2_RDFParser {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {/* reader */
     parent::__init();
     $this->encoding = $this->v('encoding', false, $this->a);
@@ -25,7 +22,7 @@ class ARC2_SPOGParser extends ARC2_RDFParser {
     $this->nsp = array($this->xml => 'xml', $this->rdf => 'rdf');
     $this->target_encoding = '';
   }
-  
+
   /*  */
 
   function parse($path, $data = '', $iso_fallback = false) {
@@ -73,9 +70,9 @@ class ARC2_SPOGParser extends ARC2_RDFParser {
     unset($this->reader);
     return $this->done();
   }
-  
+
   /*  */
-  
+
   function initXMLParser() {
     if (!isset($this->xml_parser)) {
       $enc = preg_match('/^(utf\-8|iso\-8859\-1|us\-ascii)$/i', $this->getEncoding(), $m) ? $m[1] : 'UTF-8';
@@ -91,7 +88,7 @@ class ARC2_SPOGParser extends ARC2_RDFParser {
   }
 
   /*  */
-  
+
   function getEncoding($src = 'config') {
     if ($src == 'parser') {
       return $this->target_encoding;
@@ -102,13 +99,13 @@ class ARC2_SPOGParser extends ARC2_RDFParser {
     return $this->reader->getEncoding();
     return 'UTF-8';
   }
-  
+
   /*  */
-  
+
   function getTriples() {
     return $this->v('triples', array());
   }
-  
+
   function countTriples() {
     return $this->t_count;
   }
@@ -132,7 +129,7 @@ class ARC2_SPOGParser extends ARC2_RDFParser {
   }
 
   /*  */
-  
+
   function open($p, $t, $a) {
     $this->state = $t;
     if ($t == 'result') {
@@ -155,19 +152,19 @@ class ARC2_SPOGParser extends ARC2_RDFParser {
       $this->t[$this->binding] = '_:';
     }
   }
-  
+
   function close($p, $t) {
     $this->prev_state = $this->state;
     $this->state = '';
     if ($t == 'result') {
       $this->addT(
-        $this->v('s', '', $this->t), 
-        $this->v('p', '', $this->t), 
-        $this->v('o', '', $this->t), 
-        $this->v('s_type', '', $this->t), 
-        $this->v('o_type', '', $this->t), 
-        $this->v('o_dt', '', $this->t), 
-        $this->v('o_lang', '', $this->t), 
+        $this->v('s', '', $this->t),
+        $this->v('p', '', $this->t),
+        $this->v('o', '', $this->t),
+        $this->v('s_type', '', $this->t),
+        $this->v('o_type', '', $this->t),
+        $this->v('o_dt', '', $this->t),
+        $this->v('o_lang', '', $this->t),
         $this->v('g', '', $this->t)
       );
     }
@@ -178,11 +175,11 @@ class ARC2_SPOGParser extends ARC2_RDFParser {
       $this->t[$this->binding] .= $d;
     }
   }
-  
+
   function nsDecl($p, $prf, $uri) {
     $this->nsp[$uri] = isset($this->nsp[$uri]) ? $this->nsp[$uri] : $prf;
   }
 
   /*  */
-  
+
 }

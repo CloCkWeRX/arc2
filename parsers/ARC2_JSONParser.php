@@ -14,14 +14,11 @@ ARC2::inc('RDFParser');
 
 class ARC2_JSONParser extends ARC2_RDFParser {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {
     parent::__init();
   }
-  
+
   /*  */
 
   function x($re, $v, $options = 'si') {
@@ -54,9 +51,9 @@ class ARC2_JSONParser extends ARC2_RDFParser {
     list($this->struct, $rest) = $this->extractObject($doc);
     return $this->done();
   }
-  
+
   /*  */
-  
+
   function extractObject($v) {
     if (function_exists('json_decode')) return array(json_decode($v, 1), '');
     $r = array();
@@ -83,7 +80,7 @@ class ARC2_JSONParser extends ARC2_RDFParser {
     }
     return array($r, $v);
   }
-  
+
   function extractEntry($v) {
     if ($r = $this->x('\,', $v)) $v = $r[1];
     /* k */
@@ -99,7 +96,7 @@ class ARC2_JSONParser extends ARC2_RDFParser {
     }
     return array(0, $v);
   }
-  
+
   function extractValue($v) {
     if ($r = $this->x('\,', $v)) $v = $r[1];
     if ($sub_r = $this->x('null', $v)) {
@@ -127,17 +124,17 @@ class ARC2_JSONParser extends ARC2_RDFParser {
     }
     return array(false, $v);
   }
-  
+
   /*  */
 
   function getObject() {
     return $this->v('struct', array());
   }
-  
+
   function getTriples() {
     return $this->v('triples', array());
   }
-  
+
   function countTriples() {
     return $this->t_count;
   }
@@ -161,5 +158,5 @@ class ARC2_JSONParser extends ARC2_RDFParser {
   }
 
   /*  */
-  
+
 }

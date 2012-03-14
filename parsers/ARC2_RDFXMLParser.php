@@ -12,10 +12,7 @@ ARC2::inc('RDFParser');
 
 class ARC2_RDFXMLParser extends ARC2_RDFParser {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {/* reader */
     parent::__init();
     $this->encoding = $this->v('encoding', false, $this->a);
@@ -29,7 +26,7 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
     $this->s_count = 0;
     $this->target_encoding = '';
   }
-  
+
   /*  */
 
   function parse($path, $data = '', $iso_fallback = false) {
@@ -76,9 +73,9 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
     unset($this->reader);
     return $this->done();
   }
-  
+
   /*  */
-  
+
   function initXMLParser() {
     if (!isset($this->xml_parser)) {
       $enc = preg_match('/^(utf\-8|iso\-8859\-1|us\-ascii)$/i', $this->getEncoding(), $m) ? $m[1] : 'UTF-8';
@@ -94,7 +91,7 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
   }
 
   /*  */
-  
+
   function getEncoding($src = 'config') {
     if ($src == 'parser') {
       return $this->target_encoding;
@@ -104,25 +101,25 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
     }
     return $this->reader->getEncoding();
   }
-  
+
   /*  */
-  
+
   function getTriples() {
     return $this->v('triples', array());
   }
-  
+
   function countTriples() {
     return $this->t_count;
   }
 
   /*  */
-  
+
   function pushS(&$s) {
     $s['pos'] = $this->s_count;
     $this->s_stack[$this->s_count] = $s;
     $this->s_count++;
   }
-  
+
   function popS(){/* php 4.0.x-safe */
     $r = array();
     $this->s_count--;
@@ -131,15 +128,15 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
     }
     $this->s_stack = $r;
   }
-  
+
   function updateS($s) {
     $this->s_stack[$s['pos']] = $s;
   }
-  
+
   function getParentS() {
     return ($this->s_count && isset($this->s_stack[$this->s_count - 1])) ? $this->s_stack[$this->s_count - 1] : false;
   }
-  
+
   function getParentXBase() {
     if ($p = $this->getParentS()) {
       return isset($p['p_x_base']) && $p['p_x_base'] ? $p['p_x_base'] : (isset($p['x_base']) ? $p['x_base'] : '');
@@ -155,7 +152,7 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
   }
 
   /*  */
-  
+
   function addT($s, $p, $o, $s_type, $o_type, $o_dt = '', $o_lang = '') {
     //echo "-----\nadding $s / $p / $o\n-----\n";
     $t = array('s' => $s, 'p' => $p, 'o' => $o, 's_type' => $s_type, 'o_type' => $o_type, 'o_datatype' => $o_dt, 'o_lang' => $o_lang);
@@ -179,9 +176,9 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
     $this->addT($t, $this->rdf.'predicate', $p, 'uri', 'uri');
     $this->addT($t, $this->rdf.'object', $o, 'uri', $o_type, $o_dt, $o_lang);
   }
-  
+
   /*  */
-  
+
   function open($p, $t, $a) {
     //echo "state is $this->state\n";
     //echo "opening $t\n";
@@ -219,13 +216,13 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
       default: return false;
     }
   }
-  
+
   function nsDecl($p, $prf, $uri) {
     $this->nsp[$uri] = isset($this->nsp[$uri]) ? $this->nsp[$uri] : $prf;
   }
 
   /*  */
-  
+
   function h0Open($t, $a) {
     $this->x_lang = $this->v($this->xml.'lang', $this->x_lang, $a);
     $this->x_base = $this->calcURI($this->v($this->xml.'base', $this->x_base, $a));
@@ -234,12 +231,12 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
       $this->h1Open($t, $a);
     }
   }
-  
+
   /*  */
 
   function h1Open($t, $a) {
     $s = array(
-      'x_base' => isset($a[$this->xml.'base']) ? $this->calcURI($a[$this->xml.'base']) : $this->getParentXBase(), 
+      'x_base' => isset($a[$this->xml.'base']) ? $this->calcURI($a[$this->xml.'base']) : $this->getParentXBase(),
       'x_lang' => isset($a[$this->xml.'lang']) ? $a[$this->xml.'lang'] : $this->getParentXLang(),
       'li_count' => 0,
     );
@@ -431,16 +428,16 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
   function h4Open($t, $a) {
     return $this->h1Open($t, $a);
   }
-  
+
   /*  */
 
   function h5Open($t, $a) {
     $this->state = 4;
     return $this->h4Open($t, $a);
   }
-  
+
   /*  */
-  
+
   function h6Open($t, $a) {
     $s = $this->getParentS();
     $data = isset($s['o_xml_data']) ? $s['o_xml_data'] : '';
@@ -496,9 +493,9 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
   function h1Close($t) {/* end of doc */
     $this->state = 0;
   }
-  
+
   /*  */
-  
+
   function h2Close($t) {/* expecting a prop, getting a close */
     if ($s = $this->getParentS()) {
       $has_closing_tag = (isset($s['has_closing_tag']) && !$s['has_closing_tag']) ? 0 : 1;
@@ -517,15 +514,15 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
       }
     }
   }
-  
+
   /*  */
-  
+
   function h3Close($t) {/* p close */
     $this->state = 2;
   }
-  
+
   /*  */
-  
+
   function h4Close($t) {/* empty p | pClose after cdata | pClose after collection */
     if ($s = $this->getParentS()) {
       $b = isset($s['p_x_base']) && $s['p_x_base'] ? $s['p_x_base'] : (isset($s['x_base']) ? $s['x_base'] : '');
@@ -561,9 +558,9 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
       $this->state = 2;
     }
   }
-  
+
   /*  */
-  
+
   function h5Close($t) {/* p close */
     if ($s = $this->getParentS()) {
       unset($s['p']);
@@ -613,16 +610,16 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
       $this->updateS($s);
     }
   }
-  
+
   /*  */
-  
+
   function h4Cdata($d) {
     if ($s = $this->getParentS()) {
       $s['o_cdata'] = isset($s['o_cdata']) ? $s['o_cdata'] . $d : $d;
       $this->updateS($s);
     }
   }
-  
+
   /*  */
 
   function h6Cdata($d) {
@@ -634,7 +631,7 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
       $this->updateS($s);
     }
   }
-  
+
   /*  */
-  
+
 }

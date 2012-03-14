@@ -12,17 +12,14 @@ ARC2::inc('Class');
 
 class ARC2_LegacyJSONSerializer extends ARC2_Class {
 
-  function __construct($a, &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
   function __init() {
     parent::__init();
     $this->content_header = 'application/json';
   }
 
   /*  */
-  
+
   function getSerializedArray($struct, $ind = '') {
     $n = "\n";
     if (function_exists('json_encode')) return str_replace('","', '",' . $n . '"', json_encode($struct));
@@ -37,7 +34,7 @@ class ARC2_LegacyJSONSerializer extends ARC2_Class {
     }
     return $is_flat ? $ind . '[' . $n . $r . $n . $ind . ']' : $ind . '{' . $n . $r . $n . $ind . '}';
   }
-  
+
   /*  */
 
   function isAssociativeArray($v) {
@@ -46,7 +43,7 @@ class ARC2_LegacyJSONSerializer extends ARC2_Class {
     }
     return 0;
   }
-  
+
   /*  */
 
 }
