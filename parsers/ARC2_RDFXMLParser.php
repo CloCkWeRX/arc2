@@ -120,7 +120,7 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
     $this->s_count++;
   }
 
-  function popS(){/* php 4.0.x-safe */
+  function popS() {/* php 4.0.x-safe */
     $r = array();
     $this->s_count--;
     for ($i = 0, $i_max = $this->s_count; $i < $i_max; $i++) {
@@ -196,7 +196,7 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
   function close($p, $t) {
     //echo "state is $this->state\n";
     //echo "closing $t\n";
-    switch($this->state){
+    switch($this->state) {
       case 1: return $this->h1Close($t);
       case 2: return $this->h2Close($t);
       case 3: return $this->h3Close($t);
@@ -210,7 +210,7 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
   function cdata($p, $d) {
     //echo "state is $this->state\n";
     //echo "cdata\n";
-    switch($this->state){
+    switch($this->state) {
       case 4: return $this->h4Cdata($d);
       case 6: return $this->h6Cdata($d);
       default: return false;

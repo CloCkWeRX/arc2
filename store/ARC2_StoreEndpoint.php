@@ -39,9 +39,9 @@ class ARC2_StoreEndpoint extends ARC2_Store {
 
   function p($name='', $mthd = '', $multi = '', $default = '') {
     $mthd = strtolower($mthd);
-    if ($multi){
+    if ($multi) {
       $qs = $this->getQueryString($mthd);
-      if (preg_match_all('/\&' . $name . '=([^\&]+)/', $qs, $m)){
+      if (preg_match_all('/\&' . $name . '=([^\&]+)/', $qs, $m)) {
         foreach ($m[1] as $i => $val) {
           $m[1][$i] = stripslashes($val);
         }

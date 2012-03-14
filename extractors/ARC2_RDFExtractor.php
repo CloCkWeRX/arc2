@@ -29,7 +29,7 @@ class ARC2_RDFExtractor extends ARC2_Class {
     return ARC2::x($re, $v, $options);
   }
 
-  function createBnodeID(){
+  function createBnodeID() {
     $this->bnode_id++;
     return '_:' . $this->bnode_prefix . $this->bnode_id;
   }

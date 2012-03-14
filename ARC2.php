@@ -20,17 +20,17 @@ class ARC2 {
   }
 
   /*  */
-  
+
   static function getIncPath($f = '') {
     $r = realpath(dirname(__FILE__)) . '/';
     $dirs = array(
       'plugin' => 'plugins',
       'trigger' => 'triggers',
-      'store' => 'store', 
-      'serializer' => 'serializers', 
-      'extractor' => 'extractors', 
-      'sparqlscript' => 'sparqlscript', 
-      'parser' => 'parsers', 
+      'store' => 'store',
+      'serializer' => 'serializers',
+      'extractor' => 'extractors',
+      'sparqlscript' => 'sparqlscript',
+      'parser' => 'parsers',
     );
     foreach ($dirs as $k => $dir) {
       if (preg_match('/' . $k . '/i', $f)) {
@@ -39,7 +39,7 @@ class ARC2 {
     }
     return $r;
   }
-  
+
   static function getScriptURI() {
     if (isset($_SERVER) && (isset($_SERVER['SERVER_NAME']) || isset($_SERVER['HTTP_HOST']))) {
       $proto = preg_replace('/^([a-z]+)\/.*$/', '\\1', strtolower($_SERVER['SERVER_PROTOCOL']));
@@ -53,7 +53,7 @@ class ARC2 {
       }
       return $proto . '://' . $server . ($port != 80 ? ':' . $port : '') . $script;
       /*
-      return preg_replace('/^([a-z]+)\/.*$/', '\\1', strtolower($_SERVER['SERVER_PROTOCOL'])) . 
+      return preg_replace('/^([a-z]+)\/.*$/', '\\1', strtolower($_SERVER['SERVER_PROTOCOL'])) .
         '://' . $_SERVER['SERVER_NAME'] .
         ($_SERVER['SERVER_PORT'] != 80 ? ':' . $_SERVER['SERVER_PORT'] : '') .
         $_SERVER['SCRIPT_NAME'];
@@ -67,14 +67,14 @@ class ARC2 {
 
   static function getRequestURI() {
     if (isset($_SERVER) && isset($_SERVER['REQUEST_URI'])) {
-      return preg_replace('/^([a-z]+)\/.*$/', '\\1', strtolower($_SERVER['SERVER_PROTOCOL'])) . 
+      return preg_replace('/^([a-z]+)\/.*$/', '\\1', strtolower($_SERVER['SERVER_PROTOCOL'])) .
         '://' . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME']) .
         ($_SERVER['SERVER_PORT'] != 80 ? ':' . $_SERVER['SERVER_PORT'] : '') .
         $_SERVER['REQUEST_URI'];
     }
     return ARC2::getScriptURI();
   }
-  
+
   static function inc($f, $path = '') {
     $prefix = 'ARC2';
     if (preg_match('/^([^\_]+)\_(.*)$/', $f, $m)) {
@@ -83,26 +83,37 @@ class ARC2 {
     }
     $inc_path = $path ? $path : ARC2::getIncPath($f);
     $path = $inc_path . $prefix . '_' . urlencode($f) . '.php';
-    if (file_exists($path)) return include_once($path);
+    if (file_exists($path)) {
+        return include_once($path);
+    }
+
     /* safe-mode hack */
-    if (@include_once($path)) return 1;
+    if (@include_once($path)) {
+        return 1;
+    }
+
     /* try other path */
     if ($prefix != 'ARC2') {
       $path = $inc_path . strtolower($prefix) . '/' . $prefix . '_' . urlencode($f) . '.php';
-      if (file_exists($path)) return include_once($path);
+      if (file_exists($path)) {
+          return include_once($path);
+      }
+
       /* safe-mode hack */
-      if (@include_once($path)) return 1;
+      if (@include_once($path)) {
+          return 1;
+      }
     }
     return 0;
   }
-  
+
   /*  */
 
-  static function mtime(){
+  static function mtime() {
     list($msec, $sec) = explode(" ", microtime());
     return ((float)$msec + (float)$sec);
   }
-  
+
   static function x($re, $v, $options = 'si') {
     return preg_match("/^\s*" . $re . "(.*)$/" . $options, $v, $m) ? $m : false;
   }
@@ -113,14 +124,14 @@ class ARC2 {
     ARC2::inc('getFormat');
     return ARC2_getFormat($val, $mtype, $ext);
   }
-  
+
   static function getPreferredFormat($default = 'plain') {
     ARC2::inc('getPreferredFormat');
     return ARC2_getPreferredFormat($default);
   }
-  
+
   /*  */
-  
+
   static function toUTF8($v) {
     if (urlencode($v) === $v) return $v;
     //if (utf8_decode($v) == $v) return $v;
@@ -145,7 +156,7 @@ class ARC2 {
     /* utf8 tweaks */
     return preg_replace_callback('/([\x00-\xdf][\x80-\xbf]|[\xe0-\xef][\x80-\xbf]{2}|[\xf0-\xf7][\x80-\xbf]{3}|[\xf8-\xfb][\x80-\xbf]{4}|[\xfc-\xfd][\x80-\xbf]{5}|[^\x00-\x7f])/', array('ARC2', 'getUTF8Char'), $v);
   }
-  
+
   static function getUTF8Char($v) {
     $val = $v[1];
     if (strlen(trim($val)) === 1) return utf8_encode($val);
@@ -181,7 +192,7 @@ class ARC2 {
     if (preg_match('/^(.*[\:\/])([^\:\/]+)$/', $v, $m)) return array($m[1], $m[2]);
     return array($v, '');
   }
-  
+
   /*  */
 
   static function getSimpleIndex($triples, $flatten_objects = 1, $vals = '') {
@@ -231,7 +242,7 @@ class ARC2 {
     }
     return $r;
   }
-  
+
   static function getTriplesFromIndex($index) {
     $r = array();
     foreach ($index as $s => $ps) {
@@ -269,7 +280,7 @@ class ARC2 {
     }
     return $r;
   }
-  
+
   static function getCleanedIndex() {/* removes triples from a given index */
     $indexes = func_get_args();
     $r = $indexes[0];
@@ -314,7 +325,7 @@ class ARC2 {
     }
     return $has_data ? $r : array();
   }
-  
+
   /*  */
 
   static function getStructType($v) {
@@ -356,7 +367,7 @@ class ARC2 {
     if (!$caller) $caller = new stdClass();
     return new $cls($a, $caller);
   }
-  
+
   /* resource */
 
   static function getResource($a = '') {
@@ -444,7 +455,7 @@ class ARC2 {
   static function getMemStore($a = '') {
     return ARC2::getComponent('MemStore', $a);
   }
-  
+
   /* serializers */
 
   static function getSer($prefix, $a = '') {
@@ -486,5 +497,5 @@ class ARC2 {
   }
 
   /*  */
-  
+
 }

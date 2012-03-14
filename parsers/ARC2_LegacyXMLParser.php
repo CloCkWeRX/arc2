@@ -106,7 +106,7 @@ class ARC2_LegacyXMLParser extends ARC2_Class {
 
   /*  */
 
-  function getNodeIndex(){
+  function getNodeIndex() {
     if (!isset($this->node_index)) {
       /* index by parent */
       $index = array();
@@ -256,7 +256,7 @@ class ARC2_LegacyXMLParser extends ARC2_Class {
         $node['pos'] = $prev_node['pos']+1;
       }
       elseif ($prev_node['level'] > $l) {
-        while($prev_node['level'] > $l) {
+        while ($prev_node['level'] > $l) {
           if (!isset($this->nodes[$prev_node['p_id']])) {
             //$this->addError('nesting mismatch: tag is ' . $t . ', level is ' . $l . ', prev_level is ' . $prev_node['level'] . ', prev_node p_id is ' . $prev_node['p_id']);
             break;

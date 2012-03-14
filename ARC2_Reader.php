@@ -292,7 +292,7 @@ class ARC2_Reader extends ARC2_Class {
             $h[$h_name][] = trim($m[2]);
           }
         }
-      } while(!$info['timed_out'] && !feof($s) && $line);
+      } while (!$info['timed_out'] && !feof($s) && $line);
       $h['format'] = strtolower(preg_replace('/^([^\s]+).*$/', '\\1', $this->v('content-type', '', $h)));
       $h['encoding'] = preg_match('/(utf\-8|iso\-8859\-1|us\-ascii)/', $this->v('content-type', '', $h), $m) ? strtoupper($m[1]) : '';
       $h['encoding'] = preg_match('/charset=\s*([^\s]+)/si', $this->v('content-type', '', $h), $m) ? strtoupper($m[1]) : $h['encoding'];

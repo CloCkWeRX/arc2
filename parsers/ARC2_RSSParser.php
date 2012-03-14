@@ -38,7 +38,7 @@ class ARC2_RSSParser extends ARC2_LegacyXMLParser {
     $this->reader = $reader;
   }
 
-  function createBnodeID(){
+  function createBnodeID() {
     $this->bnode_id++;
     return '_:' . $this->bnode_prefix . $this->bnode_id;
   }

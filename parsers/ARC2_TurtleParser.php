@@ -36,7 +36,7 @@ class ARC2_TurtleParser extends ARC2_RDFParser {
     //$this->unparsed_code = ($sub_r && count($sub_r)) ? $sub_r[count($sub_r) - 1] : '';
   }
 
-  function createBnodeID(){
+  function createBnodeID() {
     $this->bnode_id++;
     return '_:' . $this->bnode_prefix . $this->bnode_id;
   }

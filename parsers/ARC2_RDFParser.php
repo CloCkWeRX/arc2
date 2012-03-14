@@ -77,7 +77,7 @@ class ARC2_RDFParser extends ARC2_Class {
 
   /*  */
 
-  function createBnodeID(){
+  function createBnodeID() {
     $this->bnode_id++;
     return '_:' . $this->bnode_prefix . $this->bnode_id;
   }
