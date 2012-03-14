@@ -47,7 +47,7 @@ class ARC2_RDFJSONSerializer extends ARC2_RDFSerializer {
   function jsonEscape($v) {
     if (function_exists('json_encode')) {
       $v = json_encode($v);
-      if(preg_match('/^"(.*)"$/', $v, $matches))
+      if (preg_match('/^"(.*)"$/', $v, $matches))
         $v = $matches[1];
       return $v;
     }

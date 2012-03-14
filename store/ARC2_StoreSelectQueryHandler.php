@@ -84,7 +84,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
       $head = "";
       $r .= " ORDER BY ";
       foreach ($infos as $info) {
-        if(empty($head))
+        if (empty($head))
           $head .= "`_order_" . $info['value'] . "_` " . $info['direction'];
         else
           $head .= ", `_order_" . $info['value'] . "_` " . $info['direction'];
@@ -236,7 +236,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
           }
           if ($row || !$vars) {
             /* only merge if the value was not in the result set already */
-            if(!in_array($row, $rows)) {
+            if (!in_array($row, $rows)) {
               $rows[] = $row;
             }
           }

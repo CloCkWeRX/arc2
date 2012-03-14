@@ -35,22 +35,22 @@ class ARC2_StoreTableManager extends ARC2_Store {
 
   function createTables() {
     $con = $this->getDBCon();
-    if(!$this->createTripleTable()) {
+    if (!$this->createTripleTable()) {
       return $this->addError('Could not create "triple" table (' . mysql_error($con) . ').');
     }
-    if(!$this->createG2TTable()) {
+    if (!$this->createG2TTable()) {
       return $this->addError('Could not create "g2t" table (' . mysql_error($con) . ').');
     }
-    if(!$this->createID2ValTable()) {
+    if (!$this->createID2ValTable()) {
       return $this->addError('Could not create "id2val" table (' . mysql_error($con) . ').');
     }
-    if(!$this->createS2ValTable()) {
+    if (!$this->createS2ValTable()) {
       return $this->addError('Could not create "s2val" table (' . mysql_error($con) . ').');
     }
-    if(!$this->createO2ValTable()) {
+    if (!$this->createO2ValTable()) {
       return $this->addError('Could not create "o2val" table (' . mysql_error($con) . ').');
     }
-    if(!$this->createSettingTable()) {
+    if (!$this->createSettingTable()) {
       return $this->addError('Could not create "setting" table (' . mysql_error($con) . ').');
     }
     return 1;

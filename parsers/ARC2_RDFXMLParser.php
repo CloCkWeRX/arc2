@@ -278,7 +278,7 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
         $this->pushS($coll);
       }
       /* normal sub-node */
-      elseif(isset($sup_s['p']) && $sup_s['p']) {
+      elseif (isset($sup_s['p']) && $sup_s['p']) {
         $this->addT($sup_s['value'], $sup_s['p'], $s['value'], $sup_s['type'], $s['type']);
       }
     }

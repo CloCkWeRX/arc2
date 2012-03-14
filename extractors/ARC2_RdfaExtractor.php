@@ -86,7 +86,7 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
         elseif ($ct['p_o']) {
           $lct['new_s'] = $ct['p_o'];
           //$lct['skip'] = 1;
-          if(!isset($n['a']['property'])) $lct['skip'] = 1;/* patch by masaka */
+          if (!isset($n['a']['property'])) $lct['skip'] = 1;/* patch by masaka */
         }
       }
     }
@@ -263,7 +263,7 @@ class ARC2_RdfaExtractor extends ARC2_RDFExtractor {
     $vals = ($val = $this->v($attr, '', $n['a'])) ? explode(' ', $val) : array();
     $r = array();
     foreach ($vals as $val) {
-      if(!trim($val)) continue;
+      if (!trim($val)) continue;
       if ((list($uri, $sub_v) = $this->xURI(trim($val), $lct['base'], $lct['ns'], $attr, $lct)) && $uri) {
         $r[] = $uri;
       }

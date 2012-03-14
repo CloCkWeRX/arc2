@@ -72,7 +72,7 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
     if (!is_array($v)) {
       if (preg_match('/^\_\:/', $v)) {
         $objectCount =$this->occurrencesOfIdAsObject($v, $index);
-        if($objectCount<2){ //singleton bnode
+        if ($objectCount<2){ //singleton bnode
              return '[';  /* getSerializedIndex will fill in the  ] at the end */
         } else {
             return $v;
@@ -138,7 +138,7 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
     }
     $topLevelSubjects = array_keys($index);
     foreach ($renderedResources as $id => $turtle){
-        if(!in_array($id, $topLevelSubjects)) unset($renderedResources[$id]);
+        if (!in_array($id, $topLevelSubjects)) unset($renderedResources[$id]);
     }
     $r.= implode(array_values($renderedResources));
     if ($raw) {
@@ -149,7 +149,7 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
 
   function _serialiseResource($s, $index, $nesting=0, $nl="\n"){
       $r='';
-      if(!isset($index[$s])) return $r;
+      if (!isset($index[$s])) return $r;
       else $ps = $index[$s];
       $r .= $r ? ' .' . $nl . $nl : '';
       $s = $this->getTerm($s, 's');
@@ -167,14 +167,14 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
         foreach ($os as $o) {
           $r .= $first_o ? ' ' : ' ,' . $nl . str_pad('', strlen($s) + strlen($p) + 2);
           $termO = $this->getTerm($o, 'o', $p, $index);
-          if($termO=='['){ // we know it's a singleton bnode
+          if ($termO=='['){ // we know it's a singleton bnode
               $termID = isset($o['value'])? $o['value'] : $o;
-              if($this->resourceIsRdfList($termID, $index)){
+              if ($this->resourceIsRdfList($termID, $index)){
                   $renderAsList = true;
                 $list = $this->listToHash($termID, $index);
                 $listText= '( ';
                 foreach ($list as $listID => $listValue) {
-                    if($this->occurrencesOfIdAsObject($listID, $index) < 2 ){
+                    if ($this->occurrencesOfIdAsObject($listID, $index) < 2 ){
                       $listText.=$this->getTerm($listValue, 'o', null, $index).' ';
                     }
                     else {
@@ -182,7 +182,7 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
                     }
                 }
                 $listText.=')';
-                if($renderAsList){
+                if ($renderAsList){
                     $r.=$listText;
                     foreach ($list as $listID => $listValue) unset($index[$listID]);
                 } else {
@@ -199,7 +199,7 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
         }
         $first_p = 0;
       }
-      if($s=='[') $r.=']';
+      if ($s=='[') $r.=']';
       $r .= $r && ($nesting < 1) ? ' . ' : '';
 
       return $r.$nl.$nl;

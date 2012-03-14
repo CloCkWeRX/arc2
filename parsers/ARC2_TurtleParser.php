@@ -194,7 +194,7 @@ class ARC2_TurtleParser extends ARC2_RDFParser {
     if ($r = $this->x("\@?prefix\s+", $v)) {
       if ((list($r, $sub_v) = $this->xPNAME_NS($r[1])) && $r) {
         $prefix = $r;
-        if((list($r, $sub_v) = $this->xIRI_REF($sub_v)) && $r) {
+        if ((list($r, $sub_v) = $this->xIRI_REF($sub_v)) && $r) {
           $uri = $this->calcURI($r, $this->base);
           if ($sub_r = $this->x('\.', $sub_v)) {
             $sub_v = $sub_r[1];
@@ -382,7 +382,7 @@ class ARC2_TurtleParser extends ARC2_RDFParser {
             $state = 4;
             $proceed = 1;
           }
-          elseif((list($sub_r, $sub_v) = $this->xBlankNodePropertyList($sub_v)) && $sub_r) {
+          elseif ((list($sub_r, $sub_v) = $this->xBlankNodePropertyList($sub_v)) && $sub_r) {
             $t['o'] = $sub_r['id'];
             $t['o_type'] = $sub_r['type'];
             $r['triples'] = array_merge($r['triples'], array($t), $sub_r['triples']);
@@ -440,7 +440,7 @@ class ARC2_TurtleParser extends ARC2_RDFParser {
           $r['triples'] = array_merge($r['triples'], $sub_r['triples']);
           $proceed = 1;
         }
-        elseif((list($sub_r, $sub_v) = $this->xBlankNodePropertyList($sub_v)) && $sub_r) {
+        elseif ((list($sub_r, $sub_v) = $this->xBlankNodePropertyList($sub_v)) && $sub_r) {
           $r['triples'][] = array('type' => 'triple', 's' => $s, 'p' => $this->rdf . 'first', 'o' => $sub_r['id'], 's_type' => 'bnode', 'p_type' => 'uri', 'o_type' => $sub_r['type'], 'o_lang' => '', 'o_datatype' => '');
           $r['triples'] = array_merge($r['triples'], $sub_r['triples']);
           $proceed = 1;

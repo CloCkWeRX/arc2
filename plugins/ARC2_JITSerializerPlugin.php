@@ -21,14 +21,14 @@ class ARC2_JITSerializerPlugin extends ARC2_Class {
       return $this->addError('Input structure is not a triples array.');
     };
 
-    if(empty($triples)) {
+    if (empty($triples)) {
       return json_encode(array());
     };
 
     $nodes = array();
 
     foreach ($triples as $i=>$t) {
-      if(!array_key_exists($t['s'],$nodes)) {
+      if (!array_key_exists($t['s'],$nodes)) {
         $nodes[$t['s']]['id'] = $t['s'];
         $nodes[$t['s']]['name'] = $t['s'];
         $nodes[$t['s']]['children'] = array();
@@ -38,7 +38,7 @@ class ARC2_JITSerializerPlugin extends ARC2_Class {
       $nodes[$t['s']]['data']['relation'] = $nodes[$t['s']]['data']['relation'] . "<li> out: " . $t['o'] . " ( " . $t['p'] . " )</li>";
       $nodes[$t['s']]['children'][$t['o']] = true;
 
-      if(!array_key_exists($t['o'],$nodes)) {
+      if (!array_key_exists($t['o'],$nodes)) {
         $nodes[$t['o']]['id'] = $t['o'];
         $nodes[$t['o']]['name'] = $t['o'];
         $nodes[$t['o']]['children'] = array();
@@ -58,7 +58,7 @@ class ARC2_JITSerializerPlugin extends ARC2_Class {
 
 
     foreach ($nodes as $key => $info) {
-      if(!in_array($key, $done)) {
+      if (!in_array($key, $done)) {
         $tmp = $this->recursiveMergeChildren($key, $nodes, $done);
         $out = &$tmp;
       }
@@ -67,7 +67,7 @@ class ARC2_JITSerializerPlugin extends ARC2_Class {
   }
 
   function recursiveMergeChildren($key, $nodes, $done) {
-    if(!in_array($key, $done)) {
+    if (!in_array($key, $done)) {
       $obj = $nodes[$key];
       $done[] = $key;
       $objchildren = array();
