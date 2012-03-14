@@ -66,8 +66,10 @@ class ARC2_RDFParser extends ARC2_Class {
     return $this->parser->parse($path, $data);
   }
 
+  /** @todo Shift this to the constructor as a dep */
   function parseData($data) {
-    return $this->parse(ARC2::getScriptURI(), $data);
+    $f = new ARC2_Factory();
+    return $this->parse($f->getScriptURI(), $data);
   }
 
   /*  */

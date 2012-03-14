@@ -18,8 +18,10 @@ class ARC2_SPARQLScriptParser extends ARC2_SPARQLPlusParser {
   /*  */
 
   function parse($v, $src = '', $iso_fallback = 'ignore') {
+    $f = new ARC2_Factory();
+
     $this->setDefaultPrefixes();
-    $this->base = $src ? $this->calcBase($src) : ARC2::getScriptURI();
+    $this->base = $src ? $this->calcBase($src) : $f->getScriptURI();
     $this->blocks = array();
     $this->r = array('base' => '', 'vars' => array(), 'prefixes' => $this->prefixes);
     do {

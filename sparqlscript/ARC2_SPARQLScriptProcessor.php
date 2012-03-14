@@ -302,8 +302,10 @@ class ARC2_SPARQLScriptProcessor extends ARC2_Class {
   }
 
   function getStore($ep_uri) {
+    $f = new ARC2_Factory();
+
     /* local store */
-    if ((!$ep_uri || $ep_uri == ARC2::getScriptURI()) && ($this->v('sparqlscript_default_endpoint', '', $this->a) == 'local')) {
+    if ((!$ep_uri || $ep_uri == $f->getScriptURI()) && ($this->v('sparqlscript_default_endpoint', '', $this->a) == 'local')) {
       if (!isset($this->local_store)) $this->local_store = ARC2::getStore($this->a);/* @@todo error checking */
       return $this->local_store;
     }
