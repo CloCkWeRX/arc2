@@ -34,7 +34,7 @@ class ARC2_AtomParser extends ARC2_LegacyXMLParser {
 
   /*  */
 
-  function setReader(&$reader) {
+  function setReader($reader) {
     $this->reader = $reader;
   }
 

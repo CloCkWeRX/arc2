@@ -28,7 +28,7 @@ class ARC2_LegacyXMLParser extends ARC2_Class {
 
   /*  */
 
-  function setReader(&$reader) {
+  function setReader($reader) {
     $this->reader = $reader;
   }
 

@@ -34,7 +34,7 @@ class ARC2_RSSParser extends ARC2_LegacyXMLParser {
 
   /*  */
 
-  function setReader(&$reader) {
+  function setReader($reader) {
     $this->reader = $reader;
   }
 

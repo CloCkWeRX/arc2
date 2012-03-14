@@ -29,7 +29,7 @@ class ARC2_RDFParser extends ARC2_Class {
 
   /*  */
 
-  function setReader(&$reader) {
+  function setReader($reader) {
     $this->reader = $reader;
   }
 

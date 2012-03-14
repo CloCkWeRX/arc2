@@ -14,10 +14,6 @@ ARC2::inc('StoreQueryHandler');
 
 class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
 
-  function __construct($a = '', &$caller) {/* caller has to be a store */
-    parent::__construct($a, $caller);
-  }
-  
   function __init() {/* db_con */
     parent::__init();
     $this->store = $this->caller;
@@ -80,8 +76,8 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
       $r .= $this->is_union_query ? '(' . $sub_r . ')' : $sub_r;
       $this->indexes[$i] = $this->index;
     }
-    
-    /* if there is order information and this is a union add the ORDER BY at the 
+
+    /* if there is order information and this is a union add the ORDER BY at the
        end */
     $infos = $this->v('order_infos', array(), $this->infos['query']);
     if ($infos && $this->is_union_query) {
@@ -187,9 +183,9 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     if ($has_order_infos) {
       $r = "\n" . '`_pos_` mediumint NOT NULL AUTO_INCREMENT PRIMARY KEY, ' . $r;
     }
-    return  $r ? $r . "\n" : ''; 
+    return  $r ? $r . "\n" : '';
   }
-    
+
   function getFinalQueryResult($q_sql, $tmp_tbl) {
     /* var names */
     $vars = array();
@@ -250,9 +246,9 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     $r['rows'] = $rows;
     return $r;
   }
-  
+
   /*  */
-  
+
   function buildIndex($pattern, $id) {
     $pattern['id'] = $id;
     $type = $this->v('type', '', $pattern);
@@ -287,7 +283,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     $this->index['patterns'][$id] = $pattern;
   }
-  
+
   /*  */
 
   function analyzeIndex($pattern) {
@@ -344,7 +340,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
       $this->analyzeIndex($this->getPattern($sub_id));
     }
   }
-  
+
   /*  */
 
   function getGraphInfos($id) {
@@ -372,7 +368,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return $r;
   }
-  
+
   /*  */
 
   function getPattern($id) {
@@ -387,7 +383,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
   }
 
   /*  */
-  
+
   function getUnionIndexes($pre_index) {
     $r = array();
     $branches = array();
@@ -415,7 +411,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
               $index['union_branches'][] = $sub_union_branch_id;
             }
           }
-        }    
+        }
         if ($index['union_branches']) {
           $r = array_merge($r, $this->getUnionIndexes($index));
         }
@@ -447,11 +443,11 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     } while ($pn['parent_id'] && ($pn['type'] != 'optional'));
     return $pn['id'];
   }
-  
+
   function sameOptional($id, $id2) {
     return $this->getOptionalPattern($id) == $this->getOptionalPattern($id2);
   }
-  
+
   /*  */
 
   function isUnionPattern($id) {
@@ -464,19 +460,19 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return $this->isUnionPattern($pattern['parent_id']);
   }
-  
+
   /*  */
 
   function getValueTable($col) {
     return $this->store->getTablePrefix() . (preg_match('/^(s|o)$/', $col) ? $col . '2val' : 'id2val');
   }
-  
+
   function getGraphTable() {
     return $this->store->getTablePrefix() . 'g2t';
   }
-  
+
   /*  */
-  
+
   function getQuerySQL() {
     $nl = "\n";
     $where_sql = $this->getWHERESQL();  /* pre-fills $index['sub_joins'] $index['constraints'] */
@@ -484,27 +480,27 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     return '' .
       ($this->is_union_query ? 'SELECT' : 'SELECT' . $this->getDistinctSQL()) . $nl .
       $this->getResultVarsSQL() . $nl . /* fills $index['sub_joins'] */
-      $this->getFROMSQL() . 
-      $this->getAllJoinsSQL() . 
-      $this->getWHERESQL() . 
-      $this->getGROUPSQL() . 
-      $this->getORDERSQL() . 
+      $this->getFROMSQL() .
+      $this->getAllJoinsSQL() .
+      $this->getWHERESQL() .
+      $this->getGROUPSQL() .
+      $this->getORDERSQL() .
       ($this->is_union_query ? '' : $this->getLIMITSQL()) .
       $nl .
     '';
   }
 
   /*  */
-  
+
   function getDistinctSQL() {
     if ($this->is_union_query) {
-      return ($this->v('distinct', 0, $this->infos['query']) || $this->v('reduced', 0, $this->infos['query'])) ? '' : ' ALL';  
+      return ($this->v('distinct', 0, $this->infos['query']) || $this->v('reduced', 0, $this->infos['query'])) ? '' : ' ALL';
     }
-    return ($this->v('distinct', 0, $this->infos['query']) || $this->v('reduced', 0, $this->infos['query'])) ? ' DISTINCT' : '';  
+    return ($this->v('distinct', 0, $this->infos['query']) || $this->v('reduced', 0, $this->infos['query'])) ? ' DISTINCT' : '';
   }
 
   /*  */
-  
+
   function getResultVarsSQL() {
     $r = '';
     $vars = $this->infos['query']['result_vars'];
@@ -580,7 +576,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return $r ? $r : '1 AS `success`';
   }
-  
+
   function getVarTableInfos($var, $ignore_initial_index = 1) {
     if ($var == '*') {
       return array('table' => '', 'col' => '', 'table_alias' => '*');
@@ -606,9 +602,9 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return 0;
   }
-  
+
   /*  */
-  
+
   function getFROMSQL() {
     $from_ids = $this->index['from'];
     $r = '';
@@ -623,7 +619,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
   }
 
   /*  */
-  
+
   function getOrderedJoinIDs() {
     return array_merge($this->index['from'], $this->index['join'], $this->index['left_join']);
   }
@@ -650,7 +646,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return $r;
   }
-  
+
   function getAllJoinsSQL() {
     $js = $this->getJoins();
     $ljs = $this->getLeftJoins();
@@ -700,7 +696,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return $r;
   }
-  
+
   function getJoins() {
     $r = array();
     $nl = "\n";
@@ -715,7 +711,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return $r;
   }
-  
+
   function getLeftJoins() {
     $r = array();
     $nl = "\n";
@@ -730,13 +726,13 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return $r;
   }
-  
+
   function getJoinConditionSQL($id) {
     $r = '';
     $nl = "\n";
     $infos = $this->getJoinInfos($id);
     $pattern = $this->getPattern($id);
-    
+
     $tbl = 'T_' . $id;
     /* core dependency */
     $d_tbls = $this->getDependentJoins($id);
@@ -786,7 +782,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return 0;
   }
-  
+
   function isJoinedBefore($tbl_1, $tbl_2) {
     $tbl_ids = $this->getOrderedJoinIDs();
     foreach ($tbl_ids as $id) {
@@ -798,7 +794,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
       }
     }
   }
-  
+
   function joinDependsOn($id, $id2) {
     if (in_array($id2, array_merge($this->index['from'], $this->index['join']))) {
       return 1;
@@ -812,7 +808,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return 0;
   }
-  
+
   function getDependentJoins($id) {
     $r = array();
     /* sub joins */
@@ -835,9 +831,9 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return $r;
   }
-  
+
   /*  */
-  
+
   function getRequiredSubJoinSQL($id, $prefix = '') {/* id is a triple pattern id. Optional FILTERS and GRAPHs are getting added to the join directly */
     $nl = "\n";
     $r = '';
@@ -855,7 +851,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
         $sub_r = $sub_r ? $nl . '  AND (' . $sub_r . ')' : '';
         /* lang dt only on literals */
         if ($col == 'o_lang_dt') {
-          $sub_sub_r = 'T_' . $id . '.o_type = 2'; 
+          $sub_sub_r = 'T_' . $id . '.o_type = 2';
           $sub_r .= $nl . '  AND (' . $sub_sub_r . ')';
         }
         //$cur_prefix = $prefix ? $prefix . ' ' : 'STRAIGHT_';
@@ -878,7 +874,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
         foreach ($gi as $set) {
           if (isset($set['graph']) && !in_array($set['graph'], $added_gts)) {
             $sub_sub_r .= $sub_sub_r !== '' ? ',' : '';
-            $sub_sub_r .= $this->getTermID($set['graph'], 'g'); 
+            $sub_sub_r .= $this->getTermID($set['graph'], 'g');
             $added_gts[] = $set['graph'];
           }
         }
@@ -892,7 +888,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
           }
           foreach($occur_tbls as $tbl) {
             if (($tbl != $id) && in_array($id, $occur_tbls) && $this->isJoinedBefore($tbl, $id)) {
-              $sub_r .= $nl . '  AND (G_' .$id. '.g = G_' .$tbl. '.g)'; 
+              $sub_r .= $nl . '  AND (G_' .$id. '.g = G_' .$tbl. '.g)';
             }
           }
         }
@@ -951,7 +947,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
   }
 
   /*  */
-  
+
   function addConstraintSQLEntry($id, $sql) {
     if (!isset($this->index['constraints'][$id])) {
       $this->index['constraints'][$id] = array();
@@ -960,7 +956,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
       $this->index['constraints'][$id][] = $sql;
     }
   }
-  
+
   function getConstraintSQL($id) {
     $r = '';
     $nl = "\n";
@@ -970,9 +966,9 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return $r;
   }
-  
+
   /*  */
-  
+
   function getPatternSQL($pattern, $context) {
     $type = $this->v('type', '', $pattern);
     if (!$type) {
@@ -992,7 +988,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return $r ? $r : '';
   }
-  
+
   function getTriplePatternSQL($pattern, $context) {
     $r = '';
     $nl = "\n";
@@ -1083,9 +1079,9 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return $r;
   }
-  
+
   /*  */
-  
+
   function getFilterPatternSQL($pattern, $context) {
     $r = '';
     $id = $pattern['id'];
@@ -1129,11 +1125,11 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     $r = preg_replace('/\(\/\* language call \*\/ ([^\s]+) = ""\)/s', '((\\1 = "") OR (\\1 LIKE "%:%"))', $r);
     return $r;
   }
-  
+
   /**
    * Checks if vars in the given (filter) pattern are used within the filter's scope.
    */
-  
+
   function hasUnconnectedFilterVars($filter_pattern_id) {
     $scope_id = $this->getFilterScope($filter_pattern_id);
     $vars = $this->getFilterVars($filter_pattern_id);
@@ -1149,7 +1145,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return $r;
   }
-  
+
   /**
    * Returns the given filter pattern's scope (the id of the parent group pattern).
    */
@@ -1277,7 +1273,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return $r ? '(' . $r . ')' : $r;
   }
-  
+
   function detectExpressionValueType($pattern_ids) {
     foreach ($pattern_ids as $id) {
       $pattern = $this->getPattern($id);
@@ -1401,7 +1397,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return $r;
   }
-  
+
   /*  */
 
   function getUriExpressionSQL($pattern, $context, $val_type = '') {
@@ -1410,7 +1406,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     $r .= is_numeric($val) ? ' ' . $val : ' "' . mysql_real_escape_string($val, $this->store->getDBCon()) . '"';
     return $r;
   }
-  
+
   /*  */
 
   function getLiteralExpressionSQL($pattern, $context, $val_type = '', $parent_type = '') {
@@ -1463,7 +1459,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return trim($r);
   }
-  
+
   function findSiblingVarExpression($id) {
     $pattern = $this->getPattern($id);
     do {
@@ -1478,7 +1474,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return '';
   }
-  
+
   /*  */
 
   function getFunctionExpressionSQL($pattern, $context, $val_type = '', $parent_type = '') {
@@ -1518,7 +1514,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return '';
   }
-  
+
   function getBoundCallSQL($pattern, $context) {
     $r = '';
     $var = $pattern['args'][0]['value'];
@@ -1570,7 +1566,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
       return $this->$m($sub_pattern, $context);
     }
   }
-  
+
   function getFunctionCallSQL($pattern, $context) {
     $f_uri = $pattern['uri'];
     if (preg_match('/(integer|double|float|string)$/', $f_uri)) {/* skip conversions */
@@ -1582,7 +1578,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
       }
     }
   }
-  
+
   function getLangDatatypeCallSQL($pattern, $context) {
     $r = '';
     if (isset($pattern['patterns'])) { /* proceed with first argument only (assumed as base type for type promotion) */
@@ -1618,7 +1614,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
   function getLangCallSQL($pattern, $context) {
     return '/* language call */ ' . $this->getLangDatatypeCallSQL($pattern, $context);
   }
-  
+
   function getLangmatchesCallSQL($pattern, $context) {
     if (count($pattern['args']) == 2) {
       $arg_1 = $pattern['args'][0];
@@ -1641,7 +1637,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return '';
   }
-  
+
   function getSametermCallSQL($pattern, $context) {
     if (count($pattern['args']) == 2) {
       $arg_1 = $pattern['args'][0];
@@ -1649,12 +1645,12 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
       $sub_r_1 = $this->getExpressionSQL($arg_1, 'sameterm');
       $sub_r_2 = $this->getExpressionSQL($arg_2, 'sameterm');
       $op = $this->v('operator', '', $pattern);
-      $r = $sub_r_1 . ' ' . $op . '= ' . $sub_r_2; 
+      $r = $sub_r_1 . ' ' . $op . '= ' . $sub_r_2;
       return $r;
     }
     return '';
   }
-  
+
   function getRegexCallSQL($pattern, $context) {
     $ac = count($pattern['args']);
     if ($ac >= 2) {
@@ -1691,7 +1687,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return '';
   }
-  
+
   /*  */
 
   function getGROUPSQL() {
@@ -1702,7 +1698,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
       $var = $info['value'];
       if ($tbl_infos = $this->getVarTableInfos($var, 0)) {
         $tbl_alias = $tbl_infos['table_alias'];
-        $r .= $r ? ', ' : 'GROUP BY '; 
+        $r .= $r ? ', ' : 'GROUP BY ';
         $r .= $tbl_alias;
       }
     }
@@ -1714,9 +1710,9 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     $r .= $hr;
     return $r ? $nl . $r : $r;
   }
-  
+
   /*  */
-  
+
   function getORDERSQL() {
     $r = '';
     $nl = "\n";
@@ -1733,9 +1729,9 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return $r ? $nl . 'ORDER BY ' . $r : '';
   }
-  
+
   /*  */
-  
+
   function getLIMITSQL() {
     $r = '';
     $nl = "\n";
@@ -1743,7 +1739,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     $offset = $this->v('offset', -1, $this->infos['query']);
     if ($limit != -1) {
       $offset = ($offset == -1) ? 0 : mysql_real_escape_string($offset, $this->store->getDBCon());
-      $r = 'LIMIT ' . $offset . ',' . $limit; 
+      $r = 'LIMIT ' . $offset . ',' . $limit;
     }
     elseif ($offset != -1) {
       $r = 'LIMIT ' . mysql_real_escape_string($offset, $this->store->getDBCon()) . ',999999999999'; /* mysql doesn't support stand-alone offsets .. */
@@ -1752,7 +1748,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
   }
 
   /*  */
-  
+
   function getValueSQL($q_tbl, $q_sql) {
     $r = '';
     /* result vars */
@@ -1830,7 +1826,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     }
     return 'SELECT' . $nl . $r;
   }
-  
+
   /*  */
 
 }

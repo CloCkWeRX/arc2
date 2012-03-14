@@ -43,7 +43,7 @@ class ARC2_SemHTMLParser extends ARC2_LegacyXMLParser {
 
   /*  */
 
-  function setReader(&$reader) {
+  function setReader($reader) {
     $this->reader = $reader;
   }
 
