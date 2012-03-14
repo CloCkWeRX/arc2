@@ -13,9 +13,7 @@ ARC2::inc('RSSParser');
 class ARC2_StoreRSSLoader extends ARC2_RSSParser {
 
 
-  function __init() {
-    parent::__init();
-  }
+
 
   /*  */
 

@@ -13,9 +13,7 @@ ARC2::inc('RDFExtractor');
 class ARC2_ErdfExtractor extends ARC2_RDFExtractor {
 
 
-  function __init() {
-    parent::__init();
-  }
+
 
   /*  */
 

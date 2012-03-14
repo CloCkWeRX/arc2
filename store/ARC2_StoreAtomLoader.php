@@ -14,9 +14,7 @@ class ARC2_StoreAtomLoader extends ARC2_AtomParser {
 
 
 
-  function __init() {
-    parent::__init();
-  }
+
 
   /*  */
 

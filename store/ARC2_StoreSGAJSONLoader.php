@@ -13,9 +13,7 @@ ARC2::inc('SGAJSONParser');
 class ARC2_StoreSGAJSONLoader extends ARC2_SGAJSONParser {
 
 
-  function __init() {
-    parent::__init();
-  }
+
 
   /*  */
 

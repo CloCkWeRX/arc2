@@ -15,9 +15,7 @@ ARC2::inc('RDFParser');
 class ARC2_JSONParser extends ARC2_RDFParser {
 
 
-  function __init() {
-    parent::__init();
-  }
+
 
   /*  */
 

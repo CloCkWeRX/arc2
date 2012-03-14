@@ -17,9 +17,7 @@ class ARC2_RemoteStore extends ARC2_Class {
     $this->is_remote = 1;
   }
 
-  function __init() {
-    parent::__init();
-  }
+
 
   /*  */
 

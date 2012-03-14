@@ -13,9 +13,7 @@ ARC2::inc('SemHTMLParser');
 class ARC2_StoreSemHTMLLoader extends ARC2_SemHTMLParser {
 
 
-  function __init() {
-    parent::__init();
-  }
+
 
   /*  */
 

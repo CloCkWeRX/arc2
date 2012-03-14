@@ -13,9 +13,7 @@ ARC2::inc('SPARQLParser');
 class ARC2_SPARQLPlusParser extends ARC2_SPARQLParser {
 
 
-  function __init() {
-    parent::__init();
-  }
+
 
   /* +1 */
 

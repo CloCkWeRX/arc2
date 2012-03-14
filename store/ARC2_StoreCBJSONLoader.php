@@ -15,9 +15,7 @@ class ARC2_StoreCBJSONLoader extends ARC2_CBJSONParser {
 
 
 
-  function __init() {
-    parent::__init();
-  }
+
 
   /*  */
 
