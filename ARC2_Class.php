@@ -17,6 +17,8 @@ class ARC2_Class {
   }
 
   function __init() {/* base, time_limit */
+    $f = new ARC2_Factory();
+
     if (!$_POST && isset($GLOBALS['HTTP_RAW_POST_DATA'])) {
         parse_str($GLOBALS['HTTP_RAW_POST_DATA'], $_POST); /* php5 bug */
     }
@@ -28,7 +30,7 @@ class ARC2_Class {
     $this->used_ns = array($rdf);
     $this->ns = array_merge(array('rdf' => $rdf), $this->v('ns', array(), $this->a));
 
-    $this->base = $this->v('base', ARC2::getRequestURI(), $this->a);
+    $this->base = $this->v('base', $f->getRequestURI(), $this->a);
     $this->errors = array();
     $this->warnings = array();
     $this->adjust_utf8 = $this->v('adjust_utf8', 0, $this->a);

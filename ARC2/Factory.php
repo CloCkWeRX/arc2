@@ -28,4 +28,16 @@ class ARC2_Factory {
 
         return 'http://localhost/unknown_path';
     }
+
+    /** @todo - Replace with Net_URL / Net_URL2? */
+    public function getRequestURI() {
+        if (isset($_SERVER) && isset($_SERVER['REQUEST_URI'])) {
+            return preg_replace('/^([a-z]+)\/.*$/', '\\1', strtolower($_SERVER['SERVER_PROTOCOL'])) .
+                '://' . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME']) .
+                ($_SERVER['SERVER_PORT'] != 80 ? ':' . $_SERVER['SERVER_PORT'] : '') .
+                $_SERVER['REQUEST_URI'];
+        }
+
+        return $this->getScriptURI();
+    }
 }

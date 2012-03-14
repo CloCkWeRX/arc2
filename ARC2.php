@@ -46,15 +46,10 @@ class ARC2 {
     return $f->getScriptURI();
   }
 
+  /** @deprecated See ARC2_Factory::getRequestURI() */
   static function getRequestURI() {
-    if (isset($_SERVER) && isset($_SERVER['REQUEST_URI'])) {
-      return preg_replace('/^([a-z]+)\/.*$/', '\\1', strtolower($_SERVER['SERVER_PROTOCOL'])) .
-        '://' . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME']) .
-        ($_SERVER['SERVER_PORT'] != 80 ? ':' . $_SERVER['SERVER_PORT'] : '') .
-        $_SERVER['REQUEST_URI'];
-    }
     $f = new ARC2_Factory();
-    return $f->getScriptURI();
+    return $f->getRequestURI();
   }
 
   static function inc($f, $path = '') {

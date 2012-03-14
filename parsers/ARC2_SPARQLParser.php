@@ -23,8 +23,9 @@ class ARC2_SPARQLParser extends ARC2_TurtleParser {
   /*  */
 
   function parse($q, $src = '', $iso_fallback = 'ignore') {
+    $f = new ARC2_Factory();
     $this->setDefaultPrefixes();
-    $this->base = $src ? $this->calcBase($src) : ARC2::getRequestURI();
+    $this->base = $src ? $this->calcBase($src) : $f->getRequestURI();
     $this->r = array(
       'base' => '',
       'vars' => array(),
