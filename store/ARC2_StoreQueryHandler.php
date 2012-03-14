@@ -13,14 +13,12 @@ ARC2::inc('Class');
 
 class ARC2_StoreQueryHandler extends ARC2_Class {
 
-  function __construct($a = '', &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
+
   function __init() {/* db_con */
     parent::__init();
     $this->xsd = 'http://www.w3.org/2001/XMLSchema#';
-    $this->allow_extension_functions = $this->v('store_allow_extension_functions', 1, $this->a);    
+    $this->allow_extension_functions = $this->v('store_allow_extension_functions', 1, $this->a);
     $this->keep_time_limit = $this->v('keep_time_limit', 0, $this->a);
     $this->handler_type = '';
   }
@@ -38,7 +36,7 @@ class ARC2_StoreQueryHandler extends ARC2_Class {
   function getValueHash($val) {
     return $this->store->getValueHash($val);
   }
-  
+
   /*  */
 
   function getTripleTable() {
@@ -69,7 +67,7 @@ class ARC2_StoreQueryHandler extends ARC2_Class {
         o_type tinyint(1) NOT NULL default 0,       /* uri/bnode/literal => 0/1/2 */
         misc tinyint(1) NOT NULL default 0,         /* temporary flags */
         UNIQUE KEY (t), " . $index_code . " KEY (misc)
-      ) 
+      )
     ";
     $v = $this->store->getDBVersion();
     $sql .= (($v < '04-01-00') && ($v >= '04-00-18')) ? 'ENGINE' : (($v >= '04-01-02') ? 'ENGINE' : 'TYPE');
@@ -90,5 +88,5 @@ class ARC2_StoreQueryHandler extends ARC2_Class {
     //echo $sql;
     return $this->queryDB($sql, $this->store->getDBCon());
   }
-  
+
 }

@@ -12,16 +12,8 @@ ARC2::inc('SPOGParser');
 
 class ARC2_StoreSPOGLoader extends ARC2_SPOGParser {
 
-  function __construct($a = '', &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
-  function __init() {
-    parent::__init();
-  }
-
   /*  */
-  
+
   function addT($s, $p, $o, $s_type, $o_type, $o_dt = '', $o_lang = '', $g) {
     if (!($s && $p && $o)) return 0;
     if (!$g) $g = $this->caller->target_graph;
@@ -32,7 +24,7 @@ class ARC2_StoreSPOGLoader extends ARC2_SPOGParser {
     $this->caller->target_graph = $prev_g;
     $this->t_count++;
   }
-  
+
   /*  */
 
 }

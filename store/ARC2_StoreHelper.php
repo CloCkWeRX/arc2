@@ -12,10 +12,8 @@ ARC2::inc('Class');
 
 class ARC2_StoreHelper extends ARC2_Class {
 
-  function __construct($a = '', &$caller) {
-    parent::__construct($a, $caller);
-  }
-  
+
+
   function __init() {/* db_con */
     parent::__init();
     $this->store = $this->caller;
@@ -60,7 +58,7 @@ class ARC2_StoreHelper extends ARC2_Class {
     }
     return array('id_replacements' => $id_changes, 'triple_updates' => $t_changes);
   }
-  
+
   /*  */
 
 }
