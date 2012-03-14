@@ -201,7 +201,7 @@ class ARC2_RemoteStore extends ARC2_Class {
 
   function getDomains($p) {
     $r = array();
-    foreach($this->query('SELECT DISTINCT ?type WHERE {?s <' . $p . '> ?o ; a ?type . }', 'rows') as $row) {
+    foreach ($this->query('SELECT DISTINCT ?type WHERE {?s <' . $p . '> ?o ; a ?type . }', 'rows') as $row) {
       $r[] = $row['type'];
     }
     return $r;

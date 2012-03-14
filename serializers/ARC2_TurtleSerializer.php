@@ -28,8 +28,8 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
 
   function occurrencesOfIdAsObject($id, $index) {
       $count = 0;
-      foreach($index as $s => $ps){
-          foreach($ps as $p => $os){
+      foreach ($index as $s => $ps){
+          foreach ($ps as $p => $os){
               if (in_array(array('value'=>$id,'type'=>'bnode'), $os)) {
                   $count++;
               }
@@ -137,7 +137,7 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
         $renderedResources[$s] = $this->_serialiseResource($s, $index,$nl);
     }
     $topLevelSubjects = array_keys($index);
-    foreach($renderedResources as $id => $turtle){
+    foreach ($renderedResources as $id => $turtle){
         if(!in_array($id, $topLevelSubjects)) unset($renderedResources[$id]);
     }
     $r.= implode(array_values($renderedResources));
@@ -184,7 +184,7 @@ class ARC2_TurtleSerializer extends ARC2_RDFSerializer {
                 $listText.=')';
                 if($renderAsList){
                     $r.=$listText;
-                    foreach($list as $listID => $listValue) unset($index[$listID]);
+                    foreach ($list as $listID => $listValue) unset($index[$listID]);
                 } else {
                     $r.=$this->_serialiseResource($termID, $index, ($nesting+1));
                 }

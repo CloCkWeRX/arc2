@@ -71,7 +71,7 @@ class ARC2_JITSerializerPlugin extends ARC2_Class {
       $obj = $nodes[$key];
       $done[] = $key;
       $objchildren = array();
-      foreach($obj['children'] as $childkey => $true) {
+      foreach ($obj['children'] as $childkey => $true) {
         $objchildren[] = $this->recursiveMergeChildren($childkey, $nodes, $done);
       }
       $obj['children'] = &$objchildren;

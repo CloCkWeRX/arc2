@@ -204,7 +204,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
     $types = array(0 => 'uri', 1 => 'bnode', 2 => 'literal');
     $rows = array();
     /* iterate through all indexes to cover unions, subquerys etc. */
-    foreach($this->indexes as $key => $index) {
+    foreach ($this->indexes as $key => $index) {
       /* set the current index */
       $this->index = $index;
       $v_sql = $this->getValueSQL($tmp_tbl, $q_sql);
@@ -886,7 +886,7 @@ class ARC2_StoreSelectQueryHandler extends ARC2_StoreQueryHandler {
             $occur_tbls[] = $occur['table'];
             if ($occur['table'] == $id) break;
           }
-          foreach($occur_tbls as $tbl) {
+          foreach ($occur_tbls as $tbl) {
             if (($tbl != $id) && in_array($id, $occur_tbls) && $this->isJoinedBefore($tbl, $id)) {
               $sub_r .= $nl . '  AND (G_' .$id. '.g = G_' .$tbl. '.g)';
             }

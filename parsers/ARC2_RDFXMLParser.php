@@ -295,7 +295,7 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
       $s['is_con'] = true;
     }
     /* any other attrs (skip rdf and xml, except rdf:_, rdf:value, rdf:Seq) */
-    foreach($a as $k => $v) {
+    foreach ($a as $k => $v) {
       if (((strpos($k, $this->xml) === false) && (strpos($k, $this->rdf) === false)) || preg_match('/(\_[0-9]+|value|Seq|Bag|Alt|Statement|Property|List)$/', $k)) {
         if (strpos($k, ':')) {
           $this->addT($s['value'], $k, $v, $s['type'], 'literal', '', $s['x_lang']);
@@ -402,7 +402,7 @@ class ARC2_RDFXMLParser extends ARC2_RDFParser {
       $this->state = 4;
     }
     /* any other attrs (skip rdf and xml) */
-    foreach($a as $k => $v) {
+    foreach ($a as $k => $v) {
       if (((strpos($k, $this->xml) === false) && (strpos($k, $this->rdf) === false)) || preg_match('/(\_[0-9]+|value)$/', $k)) {
         if (strpos($k, ':')) {
           if (!$o['value']) {
